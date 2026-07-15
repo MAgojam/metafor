@@ -410,7 +410,7 @@ transf, atransf, targs, efac, col, border, lty, fonts, cex, constarea=FALSE, ...
          pi.lb <- pi.lb[not.na]
          pi.ub <- pi.ub[not.na]
          if (predstyle == "line")
-            mlab  <- mlab[not.na]
+            mlab <- mlab[not.na]
 
          ### rearrange rows due to NAs being omitted
 

@@ -27,7 +27,7 @@ test_that("plot can be drawn.", {
              xlim=c(-2.5,3.5), ylim=c(-8, 254),
              order=yi,
              slab=NA, annotate=FALSE,
-             efac=0,
+             efac=c(0,1),
              pch=19,
              col="gray40",
              psize=2,

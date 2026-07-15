@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metafor</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-13</span>
       </span>
     </div>
 
@@ -123,7 +123,7 @@
 <dd><p>logical to specify whether the prediction interval should be added to the plot (the default is <code>FALSE</code>). See ‘Details’.</p></dd>
 
    <dt id="arg-predstyle">predstyle<a class="anchor" aria-label="anchor" href="#arg-predstyle"></a></dt>
-<dd><p>character string to specify the style of the prediction interval (either <code>"line"</code> (the default), <code>"polygon"</code>, <code>"bar"</code>, <code>"shade"</code>, or <code>"dist"</code>). Can be abbreviated. Setting this to something else than <code>"line"</code> automatically sets <code>addpred=TRUE</code>.</p></dd>
+<dd><p>character string to specify the style of the prediction interval (either <code>"line"</code> (the default), <code>"polygon"</code>, <code>"bar"</code>, <code>"shade"</code>, or <code>"dist"</code>). Can be abbreviated. Specifying this argument automatically flips <code>addpred=FALSE</code> to <code>addpred=TRUE</code>.</p></dd>
 
    <dt id="arg-preddist">preddist<a class="anchor" aria-label="anchor" href="#arg-preddist"></a></dt>
 <dd><p>optional list of two elements to manually specify the predictive distribution.</p></dd>
@@ -469,6 +469,7 @@
 <span class="r-in"><span><span class="co">### various ways to show the prediction interval</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, addpred<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="forest.rma-7.png" alt="" width="1728" height="1536"></span>
+<span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, predstyle<span class="op">=</span><span class="st">"line"</span><span class="op">)</span> <span class="co"># same</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, predstyle<span class="op">=</span><span class="st">"polygon"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="forest.rma-8.png" alt="" width="1728" height="1536"></span>
 <span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, predstyle<span class="op">=</span><span class="st">"polygon"</span>, col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>,<span class="st">"white"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -575,6 +576,8 @@
 <span class="r-plt img"><img src="forest.rma-30.png" alt="" width="1728" height="1536"></span>
 <span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, efac<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># no vertical lines at the end of the CIs</span></span></span>
 <span class="r-plt img"><img src="forest.rma-31.png" alt="" width="1728" height="1536"></span>
+<span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, alim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span>, efac<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># still shows arrows when CIs extend beyond 'alim'</span></span></span>
+<span class="r-plt img"><img src="forest.rma-32.png" alt="" width="1728" height="1536"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### illustrate use of the olim argument with a meta-analysis of raw proportions</span></span></span>
 <span class="r-in"><span><span class="co">### (data from Pritz, 1997); without olim=c(0,1), some of the CIs would have upper</span></span></span>
@@ -582,7 +585,7 @@
 <span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="escalc.html">escalc</a></span><span class="op">(</span>measure<span class="op">=</span><span class="st">"PR"</span>, xi<span class="op">=</span><span class="va">xi</span>, ni<span class="op">=</span><span class="va">ni</span>, data<span class="op">=</span><span class="fu"><a href="https://wviechtb.github.io/metadat/reference/dat.pritz1997.html" class="external-link">dat.pritz1997</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="rma.uni.html">rma</a></span><span class="op">(</span><span class="va">yi</span>, <span class="va">vi</span>, data<span class="op">=</span><span class="va">dat</span>, slab<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">study</span>, <span class="st">") "</span>, <span class="va">authors</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.8</span>,<span class="fl">1.6</span><span class="op">)</span>, alim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, psize<span class="op">=</span><span class="fl">1</span>, refline<span class="op">=</span><span class="fu"><a href="coef.rma.html">coef</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, olim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="forest.rma-32.png" alt="" width="1728" height="1536"></span>
+<span class="r-plt img"><img src="forest.rma-33.png" alt="" width="1728" height="1536"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### an example of a forest plot where the data have a multilevel structure and</span></span></span>
 <span class="r-in"><span><span class="co">### we want to reflect this by grouping together estimates from the same cluster</span></span></span>
@@ -595,12 +598,12 @@
 <span class="r-in"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>tck<span class="op">=</span><span class="op">-</span><span class="fl">0.01</span>, mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.6</span>,<span class="fl">0.2</span>,<span class="fl">0</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">8</span>,<span class="fl">1</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, cex<span class="op">=</span><span class="fl">0.5</span>, rows<span class="op">=</span><span class="va">rows</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">rows</span><span class="op">)</span><span class="op">+</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">rows</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">rows</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span>, lty<span class="op">=</span><span class="st">"dotted"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="forest.rma-33.png" alt="" width="1728" height="1536"></span>
+<span class="r-plt img"><img src="forest.rma-34.png" alt="" width="1728" height="1536"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### another approach where clusters are shaded in a zebra style</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="forest.html">forest</a></span><span class="op">(</span><span class="va">res</span>, cex<span class="op">=</span><span class="fl">0.6</span>, shade<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">district</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">2</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="forest.rma-34.png" alt="" width="1728" height="1536"></span>
+<span class="r-plt img"><img src="forest.rma-35.png" alt="" width="1728" height="1536"></span>
 </code></pre></div>
     </div>
   </div>
@@ -615,7 +618,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

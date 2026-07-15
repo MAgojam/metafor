@@ -20,7 +20,7 @@
    \item{annotate}{logical to specify whether annotations should be added to the plot (the default is \code{TRUE}).}
    \item{addfit}{logical to specify whether the pooled estimate (for models without moderators) or fitted values (for models with moderators) should be added to the plot (the default is \code{TRUE}). See \sQuote{Details}.}
    \item{addpred}{logical to specify whether the prediction interval should be added to the plot (the default is \code{FALSE}). See \sQuote{Details}.}
-   \item{predstyle}{character string to specify the style of the prediction interval (either \code{"line"} (the default), \code{"polygon"}, \code{"bar"}, \code{"shade"}, or \code{"dist"}). Can be abbreviated. Setting this to something else than \code{"line"} automatically sets \code{addpred=TRUE}.}
+   \item{predstyle}{character string to specify the style of the prediction interval (either \code{"line"} (the default), \code{"polygon"}, \code{"bar"}, \code{"shade"}, or \code{"dist"}). Can be abbreviated. Specifying this argument automatically flips \code{addpred=FALSE} to \code{addpred=TRUE}.}
    \item{preddist}{optional list of two elements to manually specify the predictive distribution.}
    \item{showweights}{logical to specify whether the annotations should also include the weights given to the estimates during the model fitting (the default is \code{FALSE}). See \sQuote{Details}.}
    \item{header}{logical to specify whether column headings should be added to the plot (the default is \code{TRUE}). Can also be a character vector to specify the left and right headings (or only the left one).}
@@ -244,6 +244,7 @@ forest(res, alim=c(-3,3), order=ablat)
 
 ### various ways to show the prediction interval
 forest(res, addpred=TRUE)
+forest(res, predstyle="line") # same
 forest(res, predstyle="polygon")
 forest(res, predstyle="polygon", col=c("black","white"))
 forest(res, predstyle="bar")
@@ -324,6 +325,7 @@ par(op)
 ### illustrate the efac argument
 forest(res)
 forest(res, efac=c(0,1,1)) # no vertical lines at the end of the CIs
+forest(res, alim=c(-3,1), efac=c(0,1,1)) # still shows arrows when CIs extend beyond 'alim'
 
 ### illustrate use of the olim argument with a meta-analysis of raw proportions
 ### (data from Pritz, 1997); without olim=c(0,1), some of the CIs would have upper

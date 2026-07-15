@@ -1,4 +1,4 @@
-# metafor 5.1-12 (2026-07-01)
+# metafor 5.1-13 (2026-07-15)
 
 - `escalc()` and `rma()` now warn about unusually large standardized mean differences (possibly a result of using SEs instead of SDs in their calculation)
 

@@ -109,10 +109,10 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
    level <- .level(level)
    predlevel <- level # needed when using preddist and it has pi.lb/pi.ub and level elements
 
-   predstyle <- match.arg(predstyle, c("line", "polygon", "bar", "shade", "dist"))
+   if (is.logical(addpred) && isFALSE(addpred) && !missing(predstyle))
+      addpred <- TRUE # specifying predstyle sets addpred=TRUE automatically
 
-   if (predstyle %in% c("polygon","bar","shade","dist") && isFALSE(addpred))
-      addpred <- TRUE
+   predstyle <- match.arg(predstyle, c("line", "polygon", "bar", "shade", "dist"))
 
    if (missing(predlim))
       predlim <- NULL
@@ -476,7 +476,7 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
    } else {
       predres <- predict(x, level=level, predtype=predtype)
       pred <- predres$pred
-      if (addpred) {
+      if (isTRUE(addpred)) {
          pred.ci.lb <- predres$pi.lb
          pred.ci.ub <- predres$pi.ub
       } else {
