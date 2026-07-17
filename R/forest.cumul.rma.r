@@ -34,6 +34,11 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
 
    .start.plot()
 
+   if (interactive()) {
+      dev.hold()
+      on.exit(dev.flush(), add=TRUE)
+   }
+
    yi <- x$estimate
 
    if (missing(targs))

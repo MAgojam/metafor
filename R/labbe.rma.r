@@ -32,6 +32,11 @@ add=x$add, to=x$to, transf, targs, pch=21, psize, plim=c(0.5,3.5), col, bg, lty,
 
    .start.plot()
 
+   if (interactive()) {
+      dev.hold()
+      on.exit(dev.flush(), add=TRUE)
+   }
+
    if (missing(transf))
       transf <- FALSE
 

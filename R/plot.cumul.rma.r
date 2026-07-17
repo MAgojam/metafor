@@ -14,6 +14,11 @@ digits, cols, grid=TRUE, pch=19, cex=1, lwd=2, ...) {
 
    .start.plot()
 
+   if (interactive()) {
+      dev.hold()
+      on.exit(dev.flush(), add=TRUE)
+   }
+
    if (missing(cols))
       cols <- c(.coladj(par("bg","fg"), dark=0.2, light=-0.2), .coladj(par("bg","fg"), dark=0.8, light=-0.8))
 

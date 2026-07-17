@@ -35,6 +35,11 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
 
    .start.plot()
 
+   if (interactive()) {
+      dev.hold()
+      on.exit(dev.flush(), add=TRUE)
+   }
+
    if (missing(targs))
       targs <- NULL
 
@@ -315,16 +320,16 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
 
    xlabfont <- .chkddd(ddd$xlabfont, 1)
 
-   lplot     <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) plot(...)
-   labline   <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) abline(...)
-   lsegments <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) segments(...)
-   laxis     <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) axis(...)
-   lmtext    <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) mtext(...)
-   lpolygon  <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) polygon(...)
-   ltext     <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) text(...)
-   lpoints   <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) points(...)
-   lrect     <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) rect(...)
-   llines    <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, preddist) lines(...)
+   lplot     <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) plot(...)
+   labline   <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) abline(...)
+   lsegments <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) segments(...)
+   laxis     <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) axis(...)
+   lmtext    <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) mtext(...)
+   lpolygon  <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) polygon(...)
+   ltext     <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) text(...)
+   lpoints   <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) points(...)
+   lrect     <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) rect(...)
+   llines    <- function(..., textpos, addcred, pi.type, predtype, decreasing, clim, rowadj, annosym, tabfig, top, xlabadj, xlabfont, at.lab, predtail) lines(...)
 
    if (is.character(showweights)) {
       weighttype  <- match.arg(showweights, c("diagonal", "rowsum"))
@@ -1242,8 +1247,19 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
                }
             }
 
-            sel.l0 <- xs < 0
-            sel.g0 <- xs > 0
+            if (predstyle == "dist") {
+               if (is.null(ddd$predtail)) {
+                  ddd$predtail <- 0
+                  pred.lower.tail <- predres$pred > ddd$predtail
+               } else {
+                  pred.lower.tail <- grepl("<", ddd$predtail, fixed=TRUE)
+                  predtailtxt <- gsub("[<=>]", "", ddd$predtail)
+                  ddd$predtail <- try(eval(parse(text=predtailtxt)), silent=TRUE)
+               }
+            }
+
+            sel.l0 <- xs < ddd$predtail
+            sel.g0 <- xs > ddd$predtail
 
             if (is.function(transf)) {
                xs <- sapply(xs, transf)
@@ -1344,9 +1360,9 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
             ys.sel.l0 <- ys.sel.l0 + drow
             ys.sel.g0 <- ys.sel.g0 + drow
 
-            ### shade regions above/below 0
+            ### shade regions above/below 0 (or predtail)
 
-            if (predres$pred > 0) {
+            if (pred.lower.tail) {
                lpolygon(c(xs.sel.g0,rev(xs.sel.g0)), c(ys.sel.g0,rep(drow,length(ys.sel.g0))), col=col[4], border=ifelse(is.na(col[4]),NA,border[2]), ...)
                lpolygon(c(xs.sel.l0,rev(xs.sel.l0)), c(ys.sel.l0,rep(drow,length(ys.sel.l0))), col=col[3], border=ifelse(is.na(col[3]),NA,border[2]), ...)
             } else {
