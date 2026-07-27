@@ -6,18 +6,21 @@
    Function to fit meta-analytic equal-, fixed-, and random-effects models and (mixed-effects) meta-regression models using a linear (mixed-effects) model framework. See below and the introduction to the \pkg{\link{metafor-package}} for more details on these models. \loadmathjax
 }
 \usage{
-rma.uni(yi, vi, sei, weights, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
-        m1i, m2i, sd1i, sd2i, xi, mi, ri, ti, fi, pi, sdi, r2i, ni, mods, scale,
+rma.uni(yi, vi, sei, weights, ai, bi, ci, di, n1i, n2i,
+        x1i, x2i, t1i, t2i, m1i, m2i, sd1i, sd2i,
+        xi, mi, ri, ti, fi, pi, sdi, r2i, mini, maxi, ni, mods, scale,
         measure="GEN", data, slab, subset,
         add=1/2, to="only0", drop00=FALSE, intercept=TRUE,
         method="REML", weighted=TRUE, test="z",
         level=95, btt, att, tau2, verbose=FALSE, digits, control, \dots)
-rma(yi, vi, sei, weights, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
-        m1i, m2i, sd1i, sd2i, xi, mi, ri, ti, fi, pi, sdi, r2i, ni, mods, scale,
-        measure="GEN", data, slab, subset,
-        add=1/2, to="only0", drop00=FALSE, intercept=TRUE,
-        method="REML", weighted=TRUE, test="z",
-        level=95, btt, att, tau2, verbose=FALSE, digits, control, \dots)
+
+rma(yi, vi, sei, weights, ai, bi, ci, di, n1i, n2i,
+    x1i, x2i, t1i, t2i, m1i, m2i, sd1i, sd2i,
+    xi, mi, ri, ti, fi, pi, sdi, r2i, mini, maxi, ni, mods, scale,
+    measure="GEN", data, slab, subset,
+    add=1/2, to="only0", drop00=FALSE, intercept=TRUE,
+    method="REML", weighted=TRUE, test="z",
+    level=95, btt, att, tau2, verbose=FALSE, digits, control, \dots)
 }
 \arguments{
    \emph{These arguments pertain to data input:}
@@ -48,6 +51,8 @@ rma(yi, vi, sei, weights, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
    \item{pi}{see below and the documentation of the \code{\link{escalc}} function for more details.}
    \item{sdi}{see below and the documentation of the \code{\link{escalc}} function for more details.}
    \item{r2i}{see below and the documentation of the \code{\link{escalc}} function for more details.}
+   \item{mini}{see below and the documentation of the \code{\link{escalc}} function for more details.}
+   \item{maxi}{see below and the documentation of the \code{\link{escalc}} function for more details.}
    \item{ni}{see below and the documentation of the \code{\link{escalc}} function for more details.}
    \item{mods}{optional argument to include one or more moderators in the model. A single moderator can be given as a vector of length \mjseqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \mjseqn{k} rows and as many columns as there are moderator variables. Alternatively, a model \code{\link{formula}} can be used to specify the model. See \sQuote{Details}.}
    \item{scale}{optional argument to include one or more predictors for the scale part in a location-scale model. See \sQuote{Details}.}

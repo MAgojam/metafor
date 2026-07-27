@@ -861,6 +861,13 @@
             lab <- ifelse(short, lab, "Transformed Mean Difference")
          }
       }
+      if (measure == "POMPMD") {
+         if (identical(transf.char, "FALSE") && identical(atransf.char, "FALSE")) {
+            lab <- ifelse(short, "POMPMD", "POMP Mean Difference")
+         } else {
+            lab <- ifelse(short, lab, "Transformed POMP Mean Difference")
+         }
+      }
       if (is.element(measure, c("SMD","SMDH","SMD1","SMD1H","PBIT","OR2D","OR2DN","OR2DL"))) {
          if (identical(transf.char, "FALSE") && identical(atransf.char, "FALSE")) {
             lab <- ifelse(short, "SMD", "Standardized Mean Difference")
@@ -1120,6 +1127,13 @@
             lab <- ifelse(short, "Mean", "Mean")
          } else {
             lab <- ifelse(short, lab, "Transformed Mean")
+         }
+      }
+      if (measure == "POMPMN") {
+         if (identical(transf.char, "FALSE") && identical(atransf.char, "FALSE")) {
+            lab <- ifelse(short, "POMP Mean", "POMP Mean")
+         } else {
+            lab <- ifelse(short, lab, "Transformed POMP Mean")
          }
       }
       if (measure == "SMN") {

@@ -7,7 +7,7 @@
 \usage{
 escalc(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
                 m1i, m2i, sd1i, sd2i, xi, mi, ri, ti, fi, pi,
-                sdi, r2i, ni, yi, vi, sei,
+                sdi, r2i, mini, maxi, ni, yi, vi, sei,
        data, slab, flip, subset, include,
        add=1/2, to="only0", drop00=FALSE,
        vtype="LS", correct=TRUE, cutoff,
@@ -41,6 +41,8 @@ escalc(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
    \item{pi}{vector with the (signed) p-values.}
    \item{sdi}{vector with the standard deviations.}
    \item{r2i}{vector with the \mjseqn{R^2} values.}
+   \item{mini}{vector with the minimum values.}
+   \item{maxi}{vector with the maximum values.}
    \item{ni}{vector with the sample/group sizes.}
    \item{yi}{vector with the effect size estimates.}
    \item{vi}{vector with the corresponding sampling variances.}
@@ -119,7 +121,8 @@ escalc(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
          \item \code{"SMD"} for the \emph{standardized mean difference} (Hedges, 1981),
          \item \code{"SMDH"} for the \emph{standardized mean difference} with heteroscedastic population variances in the two groups (Bonett, 2008, 2009),
          \item \code{"SMD1"} for the \emph{standardized mean difference} where the mean difference is divided by the standard deviation of the second group (and \code{"SMD1H"} for the same but with heteroscedastic population variances),
-         \item \code{"ROM"} for the \emph{log transformed ratio of means} (Hedges et al., 1999; Lajeunesse, 2011).
+         \item \code{"ROM"} for the \emph{log transformed ratio of means} (Hedges et al., 1999; Lajeunesse, 2011),
+         \item \code{"POMPMD"} for the \emph{difference of POMP means}.
          }
 
          The raw mean difference is simply \mjeqn{(\text{m1i}-\text{m2i})}{(m1i-m2i)}, while the standardized mean difference is given by \mjeqn{(\text{m1i}-\text{m2i})/\text{sdi}}{(m1i-m2i)/sdi}. For \code{measure="SMD"}, \mjeqn{\text{sdi} = \sqrt{\frac{(\text{n1i}-1)\text{sd1i}^2 + (\text{n2i}-1)\text{sd2i}^2}{\text{n1i}+\text{n2i}-2}}}{sdi = sqrt(((n1i-1)*sd1i^2 + (n2i-1)*sd2i^2) / (n1i+n2i-2))} is the pooled standard deviation of the two groups (assuming homoscedasticity of the population variances). For \code{measure="SMDH"}, \mjeqn{\text{sdi} = \sqrt{\frac{\text{sd1i}^2 + \text{sd2i}^2}{2}}}{sdi = sqrt((sd1i^2 + sd2i^2) / 2)} is the square root of the average variance (allowing for heteroscedastic population variances). Finally, for \code{measure="SMD1"} and \code{measure="SMD1H"}, \mjeqn{\text{sdi} = \text{sd2i}}{sdi = sd2i} (note: for \code{measure="SMD1"}, only \code{sd2i} needs to be specified and \code{sd1i} is ignored).
@@ -127,6 +130,8 @@ escalc(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
          For \code{measure="SMD"}, the positive bias in the standardized mean difference (i.e., in a Cohen's d value) is automatically corrected for within the function, yielding Hedges' g (Hedges, 1981). Similarly, the analogous bias correction is applied for \code{measure="SMDH"} (Bonett, 2009), \code{measure="SMD1"} (Hedges, 1981), and \code{measure="SMD1H"}. With \code{correct=FALSE}, these bias corrections can be switched off.
 
          For \code{measure="ROM"}, the log is taken of the ratio of means (i.e., \mjeqn{\log(\text{m1i}/\text{m2i})}{log(m1i/m2i)}), which makes this measure symmetric around 0 and results in a sampling distribution that is closer to normality. Hence, this measure cannot be computed when \code{m1i} and \code{m2i} have opposite signs (in fact, this measure is only meant to be used for ratio scale measurements, where both means should be positive anyway). A bias correction is also applied to this measure (Lajeunesse, 2015, equation 8) unless \code{correct=FALSE}.
+
+         For \code{measure="POMPMD"}, arguments \code{mini} and \code{maxi} must be used to supply the theoretical (not observed!) minimim and maximum values of the measurements. These values are then used to convert the means of the two groups into percent of maximum possible (POMP) means (Cohen et al. 1999) and these are then further treated as described for \code{measure="MD"}.
 
          For \code{measure="SMD"}, if the means and standard deviations are unknown for some studies, various other inputs can be used to recover the standardized mean differences. In the case that the standardized mean differences (Cohen's d values) are directly available (e.g., they are reported in some studies), then these can be specified via argument \code{di}. If the point-biserial correlations (between the group dummy variable and the quantitative response/dependent variable) are known, these can be specified via argument \code{ri}. If the t-statistics from an independent samples (Student's) t-test are available, these can be specified via argument \code{ti}. Note that the sign of these inputs is then taken to be the sign of the standardized mean differences. If only the two-sided p-values corresponding to the t-tests are known, one can specify those values via argument \code{pi} (which are then transformed into the t-statistics and then further into the standardized mean differences). However, since a two-sided p-value does not carry information about the sign of the test statistic (and hence neither about the standardized mean difference), the sign of the p-values (which can be negative) is used as the sign of the standardized mean differences (e.g., \code{escalc(measure="SMD", pi=-0.018, n1i=20, n2i=20)} yields a negative standardized mean difference of \code{-0.7664}). See \href{https://www.metafor-project.org/doku.php/tips:assembling_data_smd}{here} for a more detailed illustration of using the \code{di}, \code{ti}, and \code{pi} arguments.
 
@@ -328,13 +333,16 @@ escalc(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
 
       \subsection{(3a) Measures for Quantitative Variables}{
 
-         The goal of a meta-analysis may be to characterize individual groups, where the response, characteristic, or dependent variable assessed in the individual studies is measured on some quantitative scale. In the simplest case, the raw mean for the quantitative variable is reported for each group, which then becomes the estimate of interest for the meta-analysis. Here, one needs to specify \code{mi}, \code{sdi}, and \code{ni} for the observed means, the observed standard deviations, and the sample sizes, respectively. One can also compute the \sQuote{single-group standardized mean}, where the mean is divided by the standard deviation (when first subtracting some fixed constant from each mean, then this is the \sQuote{single-group standardized mean difference}). If focus is solely on the variability of the measurements, then the log transformed standard deviation is a useful measure (Nakagawa et al., 2015; Raudenbush & Bryk, 1987). For this measure, one only needs to specify \code{sdi} and \code{ni}. For ratio scale measurements, the log transformed mean or the log transformed coefficient of variation may also be of interest (Nakagawa et al., 2015).
+         The goal of a meta-analysis may be to characterize individual groups, where the response, characteristic, or dependent variable assessed in the individual studies is measured on some quantitative scale. In the simplest case, the raw mean for the quantitative variable is reported for each group, which then becomes the estimate of interest for the meta-analysis. Here, one needs to specify \code{mi}, \code{sdi}, and \code{ni} for the observed means, the observed standard deviations, and the sample sizes, respectively. One can also compute the \sQuote{single-group standardized mean}, where the mean is divided by the standard deviation (when first subtracting some fixed constant from each mean, then this is the \sQuote{single-group standardized mean difference}). Also, one can transform means into percent of possible maximum (POMP) means (Cohen et al., 1999), which requires that the \code{mini} and \code{maxi} arguments are used to supply the theoretical (not observed!) minimum and maximum values of the measurements.
+
+         If focus is solely on the variability of the measurements, then the log transformed standard deviation is a useful measure (Nakagawa et al., 2015; Raudenbush & Bryk, 1987). For this measure, one only needs to specify \code{sdi} and \code{ni}. For ratio scale measurements, the log transformed mean or the log transformed coefficient of variation may also be of interest (Nakagawa et al., 2015).
 
          The options for the \code{measure} argument are:
 
          \itemize{
          \item \code{"MN"} for the \emph{raw mean},
          \item \code{"SMN"} for the \emph{single-group standardized mean (difference)},
+         \item \code{"POMPMN"} for the \emph{POMP mean},
          \item \code{"MNLN"} for the \emph{log transformed mean},
          \item \code{"SDLN"} for the \emph{log transformed standard deviation},
          \item \code{"CVLN"} for the \emph{log transformed coefficient of variation}.
@@ -605,6 +613,8 @@ escalc(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
    Cho, H., Matthews, G. J., & Harel, O. (2019). Confidence intervals for the area under the receiver operating characteristic curve in the presence of ignorable missing data. \emph{International Statistical Review}, \bold{87}(1), 152--177. \verb{https://doi.org/10.1111/insr.12277}
 
    Cohen, J. (1988). \emph{Statistical power analysis for the behavioral sciences} (2nd ed.). Hillsdale, NJ: Lawrence Erlbaum Associates.
+
+   Cohen, P., Cohen, J., Aiken, L. S., & West, S. G. (1999). The problem of units and the circumstance for POMP. \emph{Multivariate Behavioral Research}, \bold{34}(3), 315--346. \verb{https://doi.org/10.1207/S15327906MBR3403_2}
 
    Cousineau, D. (2020). Approximating the distribution of Cohen's d_p in within-subject designs. \emph{The Quantitative Methods for Psychology}, \bold{16}(4), 418--421. \verb{https://doi.org/10.20982/tqmp.16.4.p418}
 

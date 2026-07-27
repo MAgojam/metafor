@@ -1,4 +1,4 @@
-escalc <- function(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i, m1i, m2i, sd1i, sd2i, xi, mi, ri, ti, fi, pi, sdi, r2i, ni, yi, vi, sei,
+escalc <- function(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i, m1i, m2i, sd1i, sd2i, xi, mi, ri, ti, fi, pi, sdi, r2i, mini, maxi, ni, yi, vi, sei,
 data, slab, flip, subset, include, add=1/2, to="only0", drop00=FALSE, vtype="LS", correct=TRUE, cutoff,
 var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ...) {
 
@@ -19,7 +19,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                               "PBIT","OR2D","OR2DN","OR2DL",                                                    # 2x2 table transformations to SMDs
                               "MPRD","MPRR","MPOR","MPORC","MPPETO","MPORM",                                    # 2x2 table measures for matched pairs / pre-post data
                               "IRR","IRD","IRSD",                                                               # two-group person-time data (incidence) measures
-                              "MD","SMD","SMDH","SMD1","SMD1H","ROM",                                           # two-group mean/SD measures
+                              "MD","POMPMD","SMD","SMDH","SMD1","SMD1H","ROM",                                  # two-group mean/SD measures
                               "VR","CVR",                                                                       # variability ratio, coefficient of variation ratio
                               "RPB","ZPB","RBIS","ZBIS","D2OR","D2ORN","D2ORL",                                 # two-group mean/SD transformations to r_pb, r_bis, and log(OR)
                               "COR","UCOR","ZCOR",                                                              # correlations (raw and r-to-z transformed)
@@ -27,7 +27,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                               "R2","ZR2","R2F","ZR2F",                                                          # coefficient of determination / R^2 (raw and r-to-z transformed)
                               "PR","PLN","PLO","PRZ","PAS","PFT",                                               # single proportions (and transformations thereof)
                               "IR","IRLN","IRS","IRFT",                                                         # single-group person-time (incidence) data (and transformations thereof)
-                              "MN","SMN","MNLN","SDLN","CVLN",                                                  # mean, single-group standardized mean, log(mean), log(SD), log(CV)
+                              "MN","POMPMN","SMN","MNLN","SDLN","CVLN",                                         # mean, single-group standardized mean, log(mean), log(SD), log(CV)
                               "MC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC", # raw/standardized mean change, CLES/AUC, log(ROM), VR, and CVR for dependent samples
                               "ARAW","AHW","ABT",                                                               # alpha (and transformations thereof)
                               "REH","CLES","CLESN","AUC","AUCN",                                                # relative excess heterozygosity, common language effect size / area under the curve
@@ -844,7 +844,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
       ######################################################################
 
-      if (is.element(measure, c("MD","SMD","SMDH","SMD1","SMD1H","ROM","RPB","ZPB","RBIS","ZBIS","D2OR","D2ORN","D2ORL","VR","CVR"))) {
+      if (is.element(measure, c("MD","POMPMD","SMD","SMDH","SMD1","SMD1H","ROM","RPB","ZPB","RBIS","ZBIS","D2OR","D2ORN","D2ORL","VR","CVR"))) {
 
          m1i  <- .getx("m1i",  mf=mf, data=data, checknumeric=TRUE) # for VR, do not need to supply this
          m2i  <- .getx("m2i",  mf=mf, data=data, checknumeric=TRUE) # for VR, do not need to supply this
@@ -856,6 +856,8 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          ti   <- .getx("ti",   mf=mf, data=data, checknumeric=TRUE)
          pi   <- .getx("pi",   mf=mf, data=data, checknumeric=TRUE)
          ri   <- .getx("ri",   mf=mf, data=data, checknumeric=TRUE) # point-biserial correlation
+         mini <- .getx("mini", mf=mf, data=data, checknumeric=TRUE) # for POMPMD
+         maxi <- .getx("maxi", mf=mf, data=data, checknumeric=TRUE) # for POMPMD
 
          ### for these measures, need m1i, m2i, sd1i, sd2i, n1i, and n2i (and can also specify di/ti/pi/ri)
 
@@ -899,6 +901,23 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
             if (!.equal.length(m1i, m2i, sd1i, sd2i, n1i, n2i))
                stop(mstyle$stop("Supplied data vectors are not all of the same length."))
+
+         }
+
+         ### for this measure, need m1i, m2i, sd1i, sd2i, n1i, n2i, mini, and maxi
+
+         if (measure == "POMPMD") {
+
+            if (!.all.specified(m1i, m2i, sd1i, sd2i, n1i, n2i, mini, maxi))
+               stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., m1i, m2i, sd1i, sd2i, n1i, n2i, mini, maxi)."))
+
+            if (!.equal.length(m1i, m2i, sd1i, sd2i, n1i, n2i, mini, maxi))
+               stop(mstyle$stop("Supplied data vectors are not all of the same length."))
+
+            m1i <- 100 * (m1i - mini) / (maxi - mini)
+            m2i <- 100 * (m2i - mini) / (maxi - mini)
+            sd1i <- 100 * sd1i / (maxi - mini)
+            sd2i <- 100 * sd2i / (maxi - mini)
 
          }
 
@@ -964,7 +983,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          ### (raw) mean difference
 
-         if (measure == "MD") {
+         if (is.element(measure, c("MD","POMPMD"))) {
 
             yi <- m1i - m2i
 
@@ -1455,6 +1474,8 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                # this is consistent with escalc(measure="SMDH", correct=FALSE) -> conv.delta(transf=transf.dtocles)
                #tmp <- escalc(measure="SMDH", m1i=m1i[i], sd1i=sd1i[i], n1i=n1i[i], m2i=m2i[i], sd2i=sd2i[i], n2i=n2i[i], correct=FALSE)
                #vi[i] <- conv.delta(yi, vi, data=tmp, transf=transf.dtocles, replace=TRUE)$vi
+               # could also write this entirely as a function of yi
+               #vi[i] <- exp(-qnorm(yi[i])^2) / (8*base::pi) * (2*qnorm(yi[i])^2 * vri[i]^2 / (n1i[i]-1) + 2*qnorm(yi[i])^2 * (1-vri[i])^2 / (n2i[i]-1) + 4*vri[i]/(n1i[i]-1) + 4*(1-vri[i])/(n2i[i]-1))
             }
 
             ### large sample approximation to the sampling variance based on the binormal model
@@ -1479,6 +1500,8 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                # this is consistent with escalc(measure="SMD", correct=FALSE) -> conv.delta(transf=transf.dtocles)
                #tmp <- escalc(measure="SMD", m1i=m1i[i], sd1i=sd1i[i], n1i=n1i[i], m2i=m2i[i], sd2i=sd2i[i], n2i=n2i[i], correct=FALSE)
                #vi[i] <- conv.delta(yi, vi, data=tmp, transf=transf.dtocles, replace=TRUE)$vi
+               # could also write this entirely as a function of yi
+               #vi[i] <- exp(-qnorm(yi[i])^2) / (4*base::pi) * (1/n1i[i] + 1/n2i[i] + qnorm(yi[i])^2 / (n1i[i]+n2i[i]))
             }
 
             ### estimate under H0: CLES=AUC=0.5
@@ -2301,11 +2324,13 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
       ######################################################################
 
-      if (is.element(measure, c("MN","SMN","MNLN","SDLN","CVLN"))) {
+      if (is.element(measure, c("MN","POMPMN","SMN","MNLN","SDLN","CVLN"))) {
 
-         mi  <- .getx("mi",  mf=mf, data=data, checknumeric=TRUE) # for SDLN, do not need to supply this
-         sdi <- .getx("sdi", mf=mf, data=data, checknumeric=TRUE)
-         ni  <- .getx("ni",  mf=mf, data=data, checknumeric=TRUE)
+         mi   <- .getx("mi",   mf=mf, data=data, checknumeric=TRUE) # for SDLN, do not need to supply this
+         sdi  <- .getx("sdi",  mf=mf, data=data, checknumeric=TRUE)
+         ni   <- .getx("ni",   mf=mf, data=data, checknumeric=TRUE)
+         mini <- .getx("mini", mf=mf, data=data, checknumeric=TRUE)
+         maxi <- .getx("maxi", mf=mf, data=data, checknumeric=TRUE)
 
          ### for these measures, need mi, sdi, and ni
 
@@ -2316,6 +2341,21 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
             if (!.equal.length(mi, sdi, ni))
                stop(mstyle$stop("Supplied data vectors are not all of the same length."))
+
+         }
+
+         ### for this measure, need mi, sdi, ni, mini, and maxi
+
+         if (measure == "POMPMN") {
+
+            if (!.all.specified(mi, sdi, ni, mini, maxi))
+               stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., mi, sdi, ni, mini, maxi)."))
+
+            if (!.equal.length(mi, sdi, ni, mini, maxi))
+               stop(mstyle$stop("Supplied data vectors are not all of the same length."))
+
+            mi  <- 100 * (mi - mini) / (maxi - mini)
+            sdi <- 100 * sdi / (maxi - mini)
 
          }
 
@@ -2355,7 +2395,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          ### (raw) mean
 
-         if (measure == "MN") {
+         if (is.element(measure, c("MN","POMPMN"))) {
 
             yi <- mi
             sdpi <- sqrt(.wmean(sdi^2, ni-1, na.rm=TRUE))
