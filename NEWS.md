@@ -1,8 +1,10 @@
-# metafor 5.1-15 (2026-07-27)
+# metafor 5.1-16 (2026-07-28)
 
 - `escalc()` and `rma()` now warn about unusually large standardized mean differences (possibly a result of using SEs instead of SDs in their calculation)
 
 - added measures `"POMPMD"` and `"POMPMN"` to `escalc()`
+
+- corrected the equations for `vtype="LS2"` for measures `"ROMC"`, `"VRC"`, and `"CVRC"`
 
 - adjusted the default bounds for some of the integral transformations to avoid numerical issues
 
@@ -15,6 +17,8 @@
 - can now also use `replace="complete"` in `conv.2x2()`, `conv.delta()`, `conv.fivenum()`, and `conv.wald()` to also replace non-missing values with NAs
 
 - the `predict()` functions gain argument `prob` to obtain probabilistic estimates from the predictive distribution
+
+- fixed a bug in `deltamethod()` when `order=2` and added `order=3` as an option
 
 - improved the documentation a bit
 

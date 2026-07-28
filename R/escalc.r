@@ -2789,7 +2789,8 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                   vi[i] <- sd1i[i]^2 / (ni[i]*m1i[i]^2) + sd2i[i]^2 / (ni[i]*m2i[i]^2) - 2*ri[i]*sd1i[i]*sd2i[i]/(m1i[i]*m2i[i]*ni[i]) # Senior et al., 2020, equation 18
 
                if (vtype[i] == "LS2")
-                  vi[i] <- sd1i[i]^2 / (ni[i]*m1i[i]^2) + sd2i[i]^2 / (ni[i]*m2i[i]^2) + sd1i[i]^4/(2*ni[i]^2*m1i[i]^4) + sd2i[i]^4/(2*ni[i]^2*m2i[i]^4) - ri[i]*2*sd1i[i]*sd2i[i]/(ni[i]*m1i[i]*m2i[i]) + ri[i]^2*sd1i[i]^2*sd2i[i]^2*(m1i[i]^4+m2i[i]^4)/(2*ni[i]^2*m1i[i]^4*m2i[i]^4) # Senior et al., 2020, equation 19
+                  vi[i] <- sd1i[i]^2 / (ni[i]*m1i[i]^2) + sd2i[i]^2 / (ni[i]*m2i[i]^2) - 2*ri[i]*sd1i[i]*sd2i[i]/(m1i[i]*m2i[i]*ni[i]) + sd1i[i]^4/(2*ni[i]^2*m1i[i]^4) + sd2i[i]^4/(2*ni[i]^2*m2i[i]^4) - ri[i]^2*sd1i[i]^2*sd2i[i]^2/(ni[i]^2*m1i[i]^2*m2i[i]^2)
+                  #vi[i] <- sd1i[i]^2 / (ni[i]*m1i[i]^2) + sd2i[i]^2 / (ni[i]*m2i[i]^2) + sd1i[i]^4/(2*ni[i]^2*m1i[i]^4) + sd2i[i]^4/(2*ni[i]^2*m2i[i]^4) - ri[i]*2*sd1i[i]*sd2i[i]/(ni[i]*m1i[i]*m2i[i]) + ri[i]^2*sd1i[i]^2*sd2i[i]^2*(m1i[i]^4+m2i[i]^4)/(2*ni[i]^2*m1i[i]^4*m2i[i]^4) # Senior et al., 2020, equation 19 (incorrect!)
 
             }
 
@@ -2814,7 +2815,8 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                   vi[i] <- (1-ri[i]^2) / (ni[i]-1) # Senior et al., 2020, equation 21
 
                if (vtype[i] == "LS2")
-                  vi[i] <- ni[i] / (ni[i]-1)^2 - ri[i]^2 / (ni[i]-1) + ri[i]^4*(sd1i[i]^8+sd2i[i]^8) / (2*(ni[i]-1)^2*sd1i[i]^4*sd2i[i]^4) # Senior et al., 2020, equation 22
+                  vi[i] <- (1-ri[i]^2) / (ni[i]-1) + (1-ri[i]^4) / (ni[i]-1)^2
+                  #vi[i] <- ni[i] / (ni[i]-1)^2 - ri[i]^2 / (ni[i]-1) + ri[i]^4*(sd1i[i]^8+sd2i[i]^8) / (2*(ni[i]-1)^2*sd1i[i]^4*sd2i[i]^4) # Senior et al., 2020, equation 22 (incorrect!)
 
             }
 
@@ -2843,7 +2845,8 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                   vi[i] <- sd1i[i]^2 / (ni[i]*m1i[i]^2) + sd2i[i]^2 / (ni[i]*m2i[i]^2) - 2*ri[i]*sd1i[i]*sd2i[i]/(m1i[i]*m2i[i]*ni[i]) + (1-ri[i]^2) / (ni[i]-1) # Senior et al., 2020, equation 23
 
                if (vtype[i] == "LS2")
-                  vi[i] <- sd1i[i]^2 / (ni[i]*m1i[i]^2) + sd2i[i]^2 / (ni[i]*m2i[i]^2) + sd1i[i]^4/(2*ni[i]^2*m1i[i]^4) + sd2i[i]^4/(2*ni[i]^2*m2i[i]^4) - ri[i]*2*sd1i[i]*sd2i[i]/(ni[i]*m1i[i]*m2i[i]) + ri[i]^2*sd1i[i]^2*sd2i[i]^2*(m1i[i]^4+m2i[i]^4)/(2*ni[i]^2*m1i[i]^4*m2i[i]^4) + ni[i] / (ni[i]-1)^2 - ri[i]^2 / (ni[i]-1) + ri[i]^4*(sd1i[i]^8+sd2i[i]^8) / (2*(ni[i]-1)^2*sd1i[i]^4*sd2i[i]^4) # Senior et al., 2020, equation 24
+                  vi[i] <- sd1i[i]^2 / (ni[i]*m1i[i]^2) + sd2i[i]^2 / (ni[i]*m2i[i]^2) - 2*ri[i]*sd1i[i]*sd2i[i]/(m1i[i]*m2i[i]*ni[i]) + sd1i[i]^4/(2*ni[i]^2*m1i[i]^4) + sd2i[i]^4/(2*ni[i]^2*m2i[i]^4) - ri[i]^2*sd1i[i]^2*sd2i[i]^2/(ni[i]^2*m1i[i]^2*m2i[i]^2) + (1-ri[i]^2) / (ni[i]-1) + (1-ri[i]^4) / (ni[i]-1)^2
+                  #vi[i] <- sd1i[i]^2 / (ni[i]*m1i[i]^2) + sd2i[i]^2 / (ni[i]*m2i[i]^2) + sd1i[i]^4/(2*ni[i]^2*m1i[i]^4) + sd2i[i]^4/(2*ni[i]^2*m2i[i]^4) - ri[i]*2*sd1i[i]*sd2i[i]/(ni[i]*m1i[i]*m2i[i]) + ri[i]^2*sd1i[i]^2*sd2i[i]^2*(m1i[i]^4+m2i[i]^4)/(2*ni[i]^2*m1i[i]^4*m2i[i]^4) + ni[i] / (ni[i]-1)^2 - ri[i]^2 / (ni[i]-1) + ri[i]^4*(sd1i[i]^8+sd2i[i]^8) / (2*(ni[i]-1)^2*sd1i[i]^4*sd2i[i]^4) # Senior et al., 2020, equation 24 (incorrect!)
 
             }
 

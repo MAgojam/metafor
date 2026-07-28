@@ -422,7 +422,7 @@ escalc(measure, ai, bi, ci, di, n1i, n2i, x1i, x2i, t1i, t2i,
          \item \code{"CVRC"} for the \emph{log transformed coefficient of variation ratio}.
          }
 
-         Note that a bias correction is applied to measure \code{"VRC"} unless \code{correct=FALSE}. When \code{vtype="LS"} (the default), then the sampling variances are computed with equations 21 and 23 from Senior et al. (2020) for \code{"VR"} and \code{"CVR"}, respectively. When \code{vtype="LS2"}, then equations 22 and 24 based on the second-order Taylor expansions are used instead.
+         Note that a bias correction is applied to measure \code{"VRC"} unless \code{correct=FALSE}. When \code{vtype="LS"} (the default), then the sampling variances are computed with equations 21 and 23 from Senior et al. (2020) for \code{"VRC"} and \code{"CVRC"}, respectively. When \code{vtype="LS2"}, then the second-order Taylor expansions are used instead (but not equations 22 and 24 from the same paper, as these are incorrect; the correct equations were rederived).
 
       }
 

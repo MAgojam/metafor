@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metafor</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-16</span>
       </span>
     </div>
 
@@ -497,7 +497,7 @@
 <p>Finally, interest may also be focused on differences in the variability of the measurements at the two measurement occasions (or between the two matched groups). For this, the (log transformed) ratio of the standard deviations (also called the ‘variability ratio’) can be used (Senior et al., 2020). To also account for differences in mean levels, the (log transformed) ratio between the coefficients of variation from the two groups (also called the ‘coefficient of variation ratio’) can be a useful measure (Senior et al., 2020). The options for the <code>measure</code> argument are:</p>
 <p></p><ul><li><p><code>"VRC"</code> for the <em>log transformed variability ratio</em>,</p></li>
 <li><p><code>"CVRC"</code> for the <em>log transformed coefficient of variation ratio</em>.</p></li>
-</ul><p>Note that a bias correction is applied to measure <code>"VRC"</code> unless <code>correct=FALSE</code>. When <code>vtype="LS"</code> (the default), then the sampling variances are computed with equations 21 and 23 from Senior et al. (2020) for <code>"VR"</code> and <code>"CVR"</code>, respectively. When <code>vtype="LS2"</code>, then equations 22 and 24 based on the second-order Taylor expansions are used instead.</p>
+</ul><p>Note that a bias correction is applied to measure <code>"VRC"</code> unless <code>correct=FALSE</code>. When <code>vtype="LS"</code> (the default), then the sampling variances are computed with equations 21 and 23 from Senior et al. (2020) for <code>"VRC"</code> and <code>"CVRC"</code>, respectively. When <code>vtype="LS2"</code>, then the second-order Taylor expansions are used instead (but not equations 22 and 24 from the same paper, as these are incorrect; the correct equations were rederived).</p>
 <p></p>
 </div>
 
