@@ -1,38 +1,41 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a bug report
 title: ''
-labels: ''
+labels: 'bug'
 assignees: ''
-
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**This is not a support forum**. General questions about the use of the metafor package should not be asked here, but on the `r-sig-meta-analysis` mailing list (https://stat.ethz.ch/mailman/listinfo/r-sig-meta-analysis). Anything posted here should really be related to the *development* of the package (bug reports, feature requests, enhancement suggestions).
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Summary
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+Summary of the problem.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Reproducible Example (if applicable)
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+If applicable, please provide a minimal and fully reproducible example. Remove any superfluous code that is not pertinent to the issue at hand and provide a small dataset together with the code so that it can actually be run (the `dput()` function is extremely useful for this; or use one of the datasets that comes with the metafor package). See also:
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+- http://adv-r.had.co.nz/Reproducibility.html
+- https://stackoverflow.com/q/5963269/2615367
+- https://cran.r-project.org/web/packages/reprex/vignettes/reprex-dos-and-donts.html
 
-**Additional context**
-Add any other context about the problem here.
+```r
+# use this for posting code (if applicable)
+```
+
+```
+# use this for posting output (if applicable)
+```
+
+## Notes
+
+Describe any debugging steps you've taken yourself. If you've found a workaround, please provide it here.
+
+## sessionInfo()
+
+Post output of `sessionInfo()` below:
+
+```
+# put output here
+```

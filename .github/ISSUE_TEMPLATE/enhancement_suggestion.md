@@ -1,12 +1,16 @@
-## Classification:
+---
+name: Enhancement suggestion
+about: Suggest an enhancement to the package
+title: ''
+labels: 'enhancement'
+assignees: ''
+---
 
-(Pick one of: Bug Report, Feature Request, Enhancement Suggestion)
-
-**This is not a support forum**. General questions about the use of the metafor package should not be asked here, but on the `r-sig-meta-analysis` mailing list (https://stat.ethz.ch/mailman/listinfo/r-sig-meta-analysis). Anything posted here should really be related to the *development* of the package (including potential bug reports).
+**This is not a support forum**. General questions about the use of the metafor package should not be asked here, but on the `r-sig-meta-analysis` mailing list (https://stat.ethz.ch/mailman/listinfo/r-sig-meta-analysis). Anything posted here should really be related to the *development* of the package (bug reports, feature requests, enhancement suggestions).
 
 ## Summary
 
-Summary of the problem.
+Summary of the enhancement suggestion.
 
 ## Reproducible Example (if applicable)
 
@@ -22,16 +26,4 @@ If applicable, please provide a minimal and fully reproducible example. Remove a
 
 ```
 # use this for posting output (if applicable)
-```
-
-## Notes
-
-Describe any debugging steps you've taken yourself. If you've found a workaround, please provide it here.
-
-## sessionInfo()
-
-Post output of `sessionInfo()` below:
-
-```
-# put output here
 ```
