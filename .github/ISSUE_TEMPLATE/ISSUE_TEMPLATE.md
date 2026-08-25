@@ -13,7 +13,7 @@ Summary of the problem.
 If applicable, please provide a minimal and fully reproducible example. Remove any superfluous code that is not pertinent to the issue at hand and provide a small dataset together with the code so that it can actually be run (the `dput()` function is extremely useful for this; or use one of the datasets that comes with the metafor package). See also:
 
 - http://adv-r.had.co.nz/Reproducibility.html
-- https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
+- https://stackoverflow.com/q/5963269/2615367
 - https://cran.r-project.org/web/packages/reprex/vignettes/reprex-dos-and-donts.html
 
 ```r

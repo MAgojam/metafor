@@ -4,7 +4,7 @@ source("~/work/meta_analysis/metafor/metafor.r")
 
 source("settings.r")
 
-context("Checking misc: cumul() functions")
+context("Checking misc: deltamethod() function")
 
 test_that("deltamethod() works correctly for a one-dimensional input with one transformation", {
 
@@ -22,6 +22,13 @@ test_that("deltamethod() works correctly for a one-dimensional input with one tr
    expect_equivalent(vcov(res1), expected1)
    expect_equivalent(vcov(res2), expected2)
    expect_equivalent(vcov(res3), expected3)
+
+   if (FALSE) {
+      xsim <- rnorm(10^8, mean=mu, sd=sqrt(sigma2))
+      vsim <- var(xsim^3)
+      round(vcov(res3) - vsim, digits=3)
+      round(expected3 - vsim, digits=3)
+   }
 
 })
 
@@ -50,6 +57,15 @@ test_that("deltamethod() works correctly for a one-dimensional input with two tr
    expect_equivalent(vcov(res1), expected1)
    expect_equivalent(vcov(res2), expected2)
    expect_equivalent(vcov(res3), expected3)
+
+   if (FALSE) {
+      xsim <- rnorm(10^8, mean=mu, sd=sqrt(sigma2))
+      vsim <- var(cbind(xsim^2, xsim^3))
+      round(vcov(res3) - vsim, digits=3)
+      round(expected3 - vsim, digits=3)
+      round(cov2cor(vcov(res3)) - cov2cor(vsim), digits=3)
+      round(cov2cor(expected3) - cov2cor(vsim), digits=3)
+   }
 
 })
 
@@ -82,6 +98,13 @@ test_that("deltamethod() works correctly for a two-dimensional input with one tr
    expect_equivalent(vcov(res1), expected1)
    expect_equivalent(vcov(res2), expected2)
    expect_equivalent(vcov(res3), expected3)
+
+   if (FALSE) {
+      xsim <- metafor:::.mvrnorm(10^8, mu, V)
+      vsim <- var(xsim[,1]^2 * xsim[,2])
+      round(vcov(res3) - vsim, digits=3)
+      round(expected3 - vsim, digits=3)
+   }
 
 })
 
@@ -123,6 +146,15 @@ test_that("deltamethod() works correctly for a two-dimensional input with two tr
    expect_equivalent(vcov(res1), expected1)
    expect_equivalent(vcov(res2), expected2)
    expect_equivalent(vcov(res3), expected3)
+
+   if (FALSE) {
+      xsim <- metafor:::.mvrnorm(10^8, mu, V)
+      vsim <- var(cbind(xsim[,1]^2 * xsim[,2], xsim[,1] * xsim[,2]^2))
+      round(vcov(res3) - vsim, digits=3)
+      round(expected3 - vsim, digits=3)
+      round(cov2cor(vcov(res3)) - cov2cor(vsim), digits=3)
+      round(cov2cor(expected3) - cov2cor(vsim), digits=3)
+   }
 
 })
 
@@ -173,6 +205,15 @@ test_that("deltamethod() works correctly for a two-dimensional input with three 
    expect_equal(vcov(res1), expected1)
    expect_equal(vcov(res2), expected2)
    expect_equal(vcov(res3), expected3)
+
+   if (FALSE) {
+      xsim <- metafor:::.mvrnorm(10^8, mu, V)
+      vsim <- var(cbind(xsim[,1]^2 * xsim[,2], xsim[,1] * xsim[,2]^2, xsim[,1]^3))
+      round(vcov(res3) - vsim, digits=3)
+      round(expected3 - vsim, digits=3)
+      round(cov2cor(vcov(res3)) - cov2cor(vsim), digits=3)
+      round(cov2cor(expected3) - cov2cor(vsim), digits=3)
+   }
 
 })
 

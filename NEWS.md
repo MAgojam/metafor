@@ -12,13 +12,15 @@
 
 - added `colci` argument to `forest.default()`, `forest.rma()`, and `forest.cumul.rma()`
 
-- corrected a bug in `conv.2x2()` where some values for the `ci` and `di` cells could be incorrectly replaced when `replace=="all"`
+- corrected a bug in `conv.2x2()` where some values for the `ci` and `di` cells could be incorrectly replaced when `replace="all"`
 
 - can now also use `replace="complete"` in `conv.2x2()`, `conv.delta()`, `conv.fivenum()`, and `conv.wald()` to also replace non-missing values with NAs
 
 - the `predict()` functions gain argument `prob` to obtain probabilistic estimates from the predictive distribution
 
 - fixed a bug in `deltamethod()` when `order=2` and added `order=3` as an option
+
+- added `yaxis="tau"` as an option in `plot.cumul.rma()`
 
 - improved the documentation a bit
 
