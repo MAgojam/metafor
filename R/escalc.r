@@ -24,6 +24,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                               "RPB","ZPB","RBIS","ZBIS","D2OR","D2ORN","D2ORL",                                 # two-group mean/SD transformations to r_pb, r_bis, and log(OR)
                               "COR","UCOR","ZCOR",                                                              # correlations (raw and r-to-z transformed)
                               "PCOR","ZPCOR","SPCOR","ZSPCOR",                                                  # partial and semi-partial correlations
+                              #"ICC", "ZICC",                                                                    # ICC(1) and r-to-z transformed
                               "R2","ZR2","R2F","ZR2F",                                                          # coefficient of determination / R^2 (raw and r-to-z transformed)
                               "PR","PLN","PLO","PRZ","PAS","PFT",                                               # single proportions (and transformations thereof)
                               "IR","IRLN","IRS","IRFT",                                                         # single-group person-time (incidence) data (and transformations thereof)
@@ -1201,7 +1202,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
             vi  <- 1/(ni-1) * (p1i*p2i/fzi^2 - (3/2 + (1 - p1i*zi/fzi)*(1 + p2i*zi/fzi)) * yi.t^2 + yi.t^4) # Soper, 1914
             #vi <- 1/(ni-1) * (yi.t^4 + yi.t^2 * (p1i*p2i*zi^2/fzi^2 + (2*p1i-1)*zi/fzi - 5/2) + p1i*p2i/fzi^2) # Tate, 1955; equivalent to equation from Soper, 1914
             # equation appears to work even if dichotomization is done based on a sample quantile value (so that p1i, p2i, and fzi are fixed by design)
-            # this is asymptotically consistent with escalc(measure="SMD", correct=FALSE) -> conv.delta(transf=transf.dtorbis)
+            # this is consistent with escalc(measure="SMD", correct=FALSE) -> conv.delta(transf=transf.dtorbis)
             #tmp <- escalc(measure="SMD", m1i=m1i, sd1i=sd1i, n1i=n1i, m2i=m2i, sd2i=sd2i, n2i=n2i, correct=FALSE)
             #yi <- conv.delta(yi, vi, data=tmp, transf=transf.dtorbis, replace=TRUE, n1i=n1i, n2i=n2i)$yi
             #vi <- conv.delta(yi, vi, data=tmp, transf=transf.dtorbis, replace=TRUE, n1i=n1i, n2i=n2i)$vi
@@ -1773,6 +1774,63 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
       ######################################################################
 
+      if (is.element(measure, c("ICC","ZICC"))) {
+
+         ri <- .getx("ri", mf=mf, data=data, checknumeric=TRUE)
+         mi <- .getx("mi", mf=mf, data=data, checknumeric=TRUE)
+         ni <- .getx("ni", mf=mf, data=data, checknumeric=TRUE)
+
+         if (!.all.specified(ri, mi, ni))
+            stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., ri, mi, ni)."))
+
+         if (!.equal.length(ri, mi, ni))
+            stop(mstyle$stop("Supplied data vectors are not all of the same length."))
+
+         k.all <- length(ri)
+
+         if (!is.null(subset)) {
+            subset <- .chksubset(subset, k.all)
+            ri <- .getsubset(ri, subset)
+            mi <- .getsubset(mi, subset)
+            ni <- .getsubset(ni, subset)
+         }
+
+         if (any(abs(ri) > 1, na.rm=TRUE))
+            stop(mstyle$stop("One or more ICC values are > 1 or < -1."))
+
+         if (any(mi < 2, na.rm=TRUE))
+            stop(mstyle$stop("One or more mi values are < 2."))
+
+         if (any(ni <= 0, na.rm=TRUE))
+            stop(mstyle$stop("One or more sample sizes are <= 0."))
+
+         ni.u <- ni # unadjusted total sample sizes
+
+         k <- length(ri)
+
+         ### raw ICC values
+
+         if (measure == "ICC") {
+            yi <- ri
+            vi <- 2 * (1-ri)^2 * (1 + (mi-1) * ri)^2 / (mi * (mi-1) * ni)
+         }
+
+         ### r-to-z transformed ICC values
+
+         if (measure == "ZICC") {
+            yi <- 1/2 * log((1 + (mi-1) * ri) / (1 - ri))
+            #vi <- mi / (2 * (mi-1) * ni)
+            # this is consistent with escalc(measure="ICC") -> conv.delta(transf=transf.icctoz)
+            #tmp <- escalc(measure="ICC", ri=ri, mi=mi, ni=ni)
+            #vi <- conv.delta(yi, vi, data=tmp, transf=transf.icctoz, targs=list(mi=mi), replace=TRUE)$vi
+            # but Fisher (1921) gives the following equation
+            vi <- mi / (2 * (mi-1) * (ni-2))
+         }
+
+      }
+
+      ######################################################################
+
       if (is.element(measure, c("R2","ZR2","R2F","ZR2F"))) {
 
          r2i <- .getx("r2i", mf=mf, data=data, checknumeric=TRUE)
@@ -2182,7 +2240,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          if (measure == "PFT") {
             yi <- 1/2*(asin(sqrt(xi/(ni+1))) + asin(sqrt((xi+1)/(ni+1))))
             vi <- 1/(4*ni+2)
-            # this is asymptotically consistent with escalc(measure="PR") -> conv.delta(transf=transf.pft)
+            # this is consistent with escalc(measure="PR") -> conv.delta(transf=transf.pft)
             #tmp <- escalc(measure="PR", xi=xi, ni=ni)
             #vi <- conv.delta(yi, vi, data=tmp, transf=transf.pft, ni=ni, replace=TRUE)$vi
          }
@@ -2315,7 +2373,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          if (measure == "IRFT") {
             yi <- 1/2 * (sqrt(iri) + sqrt(iri+1/ti))
             vi <- 1 / (4*ti)
-            # this is asymptotically consistent with escalc(measure="IR") -> conv.delta(transf=transf.irft)
+            # this is consistent with escalc(measure="IR") -> conv.delta(transf=transf.irft)
             #tmp <- escalc(measure="IR", xi=xi, ti=ti)
             #vi <- conv.delta(yi, vi, data=tmp, transf=transf.irft, ti=ti, replace=TRUE)$vi
          }
@@ -2904,7 +2962,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
             yi <- 1 - (1-ai)^(1/3) # but with this, yi remains a monotonically increasing function of ai
             vi <- 18*mi*(ni-1)*(1-ai)^(2/3) / ((mi-1)*(9*ni-11)^2)
             #vi <- 2*mi*(1-ai)^(2/3) / (9*(mi-1)*(ni-2)) # this follows from the delta method
-            # this is asymptotically consistent with escalc(measure="ARAW") -> conv.delta(transf=transf.ahw)
+            # this is consistent with escalc(measure="ARAW") -> conv.delta(transf=transf.ahw)
             #tmp <- escalc(measure="ARAW", ai=ai, mi=mi, ni=ni)
             #vi <- conv.delta(yi, vi, data=tmp, transf=transf.ahw, replace=TRUE)$vi
          }

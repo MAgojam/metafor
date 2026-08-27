@@ -2727,8 +2727,8 @@ test="z", level=95, btt, att, tau2, verbose=FALSE, digits, control, ...) {
 
    # the Knapp & Hartung method as described in the literature is only for random/mixed-effects models
 
-   if (is.element(method[1], c("FE","EE","CE")) && is.element(test, c("knha","adhoc")))
-      warning(mstyle$warning(paste0("Knapp and Hartung method is not meant to be used in the context of '", method[1], "' models.")), call.=FALSE)
+   #if (is.element(method[1], c("FE","EE","CE")) && is.element(test, c("knha","adhoc")))
+   #   warning(mstyle$warning(paste0("Knapp and Hartung method is not meant to be used in the context of '", method[1], "' models.")), call.=FALSE)
 
    # Knapp & Hartung method with ad-hoc correction so that the scaling factor is always >= 1
 

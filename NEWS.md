@@ -1,4 +1,4 @@
-# metafor 5.1-16 (2026-07-28)
+# metafor 5.1-17 (2026-08-27)
 
 - `escalc()` and `rma()` now warn about unusually large standardized mean differences (possibly a result of using SEs instead of SDs in their calculation)
 
@@ -21,6 +21,8 @@
 - fixed a bug in `deltamethod()` when `order=2` and added `order=3` as an option
 
 - added `yaxis="tau"` as an option in `plot.cumul.rma()`
+
+- corrected a bug in `transf.iahw.int()`, `transf.iahw.mode()`, `transf.iabt.int()`, and `transf.iabt.mode()` not returning the correct value when `tau2 == 0`
 
 - improved the documentation a bit
 

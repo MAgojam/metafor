@@ -362,12 +362,14 @@ transf, atransf, targs, efac, col, border, lty, fonts, cex, constarea=FALSE, ...
       cdf <- cumsum(diff(pdxs) * (pdys[-1]+pdys[-length(pdys)])/2)
       cdf <- cdf / max(cdf)
       if (is.null(preddist$pi.lb)) {
-         pi.lb <- pdxs[which.min(abs(cdf - pi.level/2))]
+         if (!hasArg(pi.lb) || is.null(pi.lb))
+            pi.lb <- pdxs[which.min(abs(cdf - pi.level/2))]
       } else {
          pi.lb <- preddist$pi.lb
       }
       if (is.null(preddist$pi.ub)) {
-         pi.ub <- pdxs[which.min(abs(cdf - (1-pi.level/2)))]
+         if (!hasArg(pi.ub) || is.null(pi.ub))
+            pi.ub <- pdxs[which.min(abs(cdf - (1-pi.level/2)))]
       } else {
          pi.ub <- preddist$pi.ub
       }
