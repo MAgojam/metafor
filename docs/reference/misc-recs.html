@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metafor</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-18</span>
       </span>
     </div>
 
@@ -128,7 +128,7 @@
 <p></p><div class="sourceCode"><pre><code><span><span class="co"># construct/approximate the var-cov matrix of dependent estimates</span></span>
 <span><span class="va">V</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vcalc.html">vcalc</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># fit multivariate/multilevel model with appropriate fixed/random effects</span></span>
+<span><span class="co"># fit a multivariate/multilevel model with appropriate fixed/random effects</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rma.mv.html">rma.mv</a></span><span class="op">(</span><span class="va">yi</span>, <span class="va">V</span>, mods <span class="op">=</span> <span class="op">~</span> <span class="va">...</span>, random <span class="op">=</span> <span class="op">~</span> <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># apply cluster-robust inference methods (robust variance estimation)</span></span>

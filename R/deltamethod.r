@@ -76,6 +76,9 @@ deltamethod <- function(x, vcov, fun, order=1, level, H0=0, digits) {
 
    #########################################################################
 
+   if (is.list(vcov))
+      stop(mstyle$stop("Argument 'vcov' is not a matrix."))
+
    if (.is.vector(vcov) || nrow(vcov) == 1L || ncol(vcov) == 1L)
       vcov <- .diag(as.vector(vcov))
 

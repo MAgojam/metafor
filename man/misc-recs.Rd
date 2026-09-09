@@ -36,7 +36,7 @@ This page documents some recommended practices when working with the \pkg{metafo
       \preformatted{# construct/approximate the var-cov matrix of dependent estimates
 V <- vcalc(...)
 
-# fit multivariate/multilevel model with appropriate fixed/random effects
+# fit a multivariate/multilevel model with appropriate fixed/random effects
 res <- rma.mv(yi, V, mods = ~ ..., random = ~ ...)
 
 # apply cluster-robust inference methods (robust variance estimation)

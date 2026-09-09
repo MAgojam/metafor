@@ -346,7 +346,7 @@ cvvc=FALSE, sparse=FALSE, verbose=FALSE, digits, control, ...) {
 
    attr(yi, "measure") <- measure
 
-   ### check for unusually large estimates for a given measure
+   ### check for unusually large estimates for a given measure; TODO: would need a 'measure' argument, but not sure if this really should be added
 
    #.chkyisize(as.vector(yi), measure=measure, cutoff=cutoff)
 

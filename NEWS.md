@@ -1,10 +1,12 @@
-# metafor 5.1-17 (2026-08-27)
+# metafor 5.1-18 (2026-09-09)
 
 - `escalc()` and `rma()` now warn about unusually large standardized mean differences (possibly a result of using SEs instead of SDs in their calculation)
 
-- added measures `"POMPMD"` and `"POMPMN"` to `escalc()`
+- added measures `"POMPMD"`, `"POMPMN"`, and `"POMPMC"` to `escalc()`
 
 - corrected the equations for `vtype="LS2"` for measures `"ROMC"`, `"VRC"`, and `"CVRC"`
+
+- added `vtype="LS3"` for measure `"SMD"`
 
 - adjusted the default bounds for some of the integral transformations to avoid numerical issues
 
@@ -20,9 +22,11 @@
 
 - fixed a bug in `deltamethod()` when `order=2` and added `order=3` as an option
 
-- added `yaxis="tau"` as an option in `plot.cumul.rma()`
+- added `yaxis="tau"` as an option to `plot.cumul.rma()`
 
 - corrected a bug in `transf.iahw.int()`, `transf.iahw.mode()`, `transf.iabt.int()`, and `transf.iabt.mode()` not returning the correct value when `tau2 == 0`
+
+- added `cmicalc()` as an exported function
 
 - improved the documentation a bit
 

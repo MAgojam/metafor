@@ -990,6 +990,26 @@
          }
       }
       ######################################################################
+      #if (measure == "ICC") {
+      #   if (identical(transf.char, "FALSE") && identical(atransf.char, "FALSE")) {
+      #      lab <- ifelse(short, "ICC", "Intraclass Correlation Coefficient")
+      #   } else {
+      #      lab <- ifelse(short, lab, "Transformed ICC")
+      #   }
+      #}
+      #if (measure == "ZICC") {
+      #   if (identical(transf.char, "FALSE") && identical(atransf.char, "FALSE")) {
+      #      lab <- ifelse(short, expression('Fisher\'s ' * z[ICC]), "Fisher's z Transformed ICC")
+      #   } else {
+      #      lab <- ifelse(short, lab, "Transformed Fisher's z ICC")
+      #      funlist <- lapply(list(transf.ztoicc), deparse)
+      #      if (any(sapply(funlist, identical, atransf.char)))
+      #         lab <- ifelse(short, "ICC", "Intraclass Correlation Coefficient")
+      #      if (any(sapply(funlist, identical, transf.char)))
+      #         lab <- ifelse(short, "ICC", "Intraclass Correlation Coefficient")
+      #   }
+      #}
+      ######################################################################
       if (is.element(measure, c("R2","R2F"))) {
          if (identical(transf.char, "FALSE") && identical(atransf.char, "FALSE")) {
             lab <- ifelse(short, expression(R^2), "Coefficient of Determination")
@@ -1185,6 +1205,13 @@
             lab <- ifelse(short, "Mean Change", "Mean Change")
          } else {
             lab <- ifelse(short, lab, "Transformed Mean Change")
+         }
+      }
+      if (measure == "POMPMC") {
+         if (identical(transf.char, "FALSE") && identical(atransf.char, "FALSE")) {
+            lab <- ifelse(short, "POMPMC", "POMP Mean Change")
+         } else {
+            lab <- ifelse(short, lab, "Transformed POMP Mean Change")
          }
       }
       if (is.element(measure, c("SMCC","SMCR","SMCRH","SMCRP","SMCRPH"))) {

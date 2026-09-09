@@ -21,11 +21,12 @@ test="z", level=95, btt, att, tau2, verbose=FALSE, digits, control, ...) {
                               "RPB","ZPB","RBIS","ZBIS","D2OR","D2ORN","D2ORL",                                 # two-group mean/SD transformations to r_pb, r_bis, and log(OR)
                               "COR","UCOR","ZCOR",                                                              # correlations (raw and r-to-z transformed)
                               "PCOR","ZPCOR","SPCOR","ZSPCOR",                                                  # partial and semi-partial correlations
+                              #"ICC", "ZICC",                                                                    # ICC(1) and r-to-z transformed
                               "R2","ZR2","R2F","ZR2F",                                                          # coefficient of determination / R^2 (raw and r-to-z transformed)
                               "PR","PLN","PLO","PRZ","PAS","PFT",                                               # single proportions (and transformations thereof)
                               "IR","IRLN","IRS","IRFT",                                                         # single-group person-time (incidence) data (and transformations thereof)
                               "MN","POMPMN","SMN","MNLN","SDLN","CVLN",                                         # mean, single-group standardized mean, log(mean), log(SD), log(CV)
-                              "MC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC", # raw/standardized mean change, CLES/AUC, log(ROM), VR, and CVR for dependent samples
+                              "MC","POMPMC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC", # raw/standardized mean change, CLES/AUC, log(ROM), VR, and CVR for dependent samples
                               "ARAW","AHW","ABT",                                                               # alpha (and transformations thereof)
                               "REH","CLES","CLESN","AUC","AUCN",                                                # relative excess heterozygosity, common language effect size / area under the curve
                               "HR","HD",                                                                        # hazard (rate) ratios and differences
@@ -618,6 +619,29 @@ test="z", level=95, btt, att, tau2, verbose=FALSE, digits, control, ...) {
 
       }
 
+      if (is.element(measure, c("ICC","ZICC"))) {
+
+         ri <- .getx("r2i", mf=mf, data=data, checknumeric=TRUE)
+         mi <- .getx("mi",  mf=mf, data=data, checknumeric=TRUE)
+         ni <- .getx("ni",  mf=mf, data=data, checknumeric=TRUE)
+
+         if (!.equal.length(ri, mi, ni))
+            stop(mstyle$stop("Supplied data vectors are not all of the same length."))
+
+         k <- length(ri) # number of outcomes before subsetting
+         k.all <- k
+
+         if (!is.null(subset)) {
+            subset <- .chksubset(subset, k)
+            ri <- .getsubset(r2i,  subset)
+            mi <- .getsubset(mi,  subset)
+            ni <- .getsubset(ni,  subset)
+         }
+
+         args <- list(ri=ri, mi=mi, ni=ni)
+
+      }
+
       if (is.element(measure, c("R2","ZR2","R2F","ZR2F"))) {
 
          r2i <- .getx("r2i", mf=mf, data=data, checknumeric=TRUE)
@@ -709,7 +733,7 @@ test="z", level=95, btt, att, tau2, verbose=FALSE, digits, control, ...) {
 
       }
 
-      if (is.element(measure, c("MC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC"))) {
+      if (is.element(measure, c("MC","POMPMC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC"))) {
 
          m1i  <- .getx("m1i",  mf=mf, data=data, checknumeric=TRUE)
          m2i  <- .getx("m2i",  mf=mf, data=data, checknumeric=TRUE)
@@ -720,6 +744,8 @@ test="z", level=95, btt, att, tau2, verbose=FALSE, digits, control, ...) {
          di   <- .getx("di",   mf=mf, data=data, checknumeric=TRUE)
          ti   <- .getx("ti",   mf=mf, data=data, checknumeric=TRUE)
          pi   <- .getx("pi",   mf=mf, data=data, checknumeric=TRUE)
+         mini <- .getx("mini", mf=mf, data=data, checknumeric=TRUE)
+         maxi <- .getx("maxi", mf=mf, data=data, checknumeric=TRUE)
 
          ri <- .expand1(ri, list(m1i, m2i, sd1i, sd2i, ni, di, ti, pi))
 
@@ -750,9 +776,11 @@ test="z", level=95, btt, att, tau2, verbose=FALSE, digits, control, ...) {
             sd2i <- .getsubset(sd2i, subset)
             ni   <- .getsubset(ni,   subset)
             ri   <- .getsubset(ri,   subset)
+            mini <- .getsubset(mini, subset)
+            maxi <- .getsubset(maxi, subset)
          }
 
-         args <- list(m1i=m1i, m2i=m2i, sd1i=sd1i, sd2i=sd2i, ri=ri, ni=ni)
+         args <- list(m1i=m1i, m2i=m2i, sd1i=sd1i, sd2i=sd2i, ri=ri, ni=ni, mini=mini, maxi=maxi)
 
       }
 

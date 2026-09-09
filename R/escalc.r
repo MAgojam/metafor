@@ -24,12 +24,12 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                               "RPB","ZPB","RBIS","ZBIS","D2OR","D2ORN","D2ORL",                                 # two-group mean/SD transformations to r_pb, r_bis, and log(OR)
                               "COR","UCOR","ZCOR",                                                              # correlations (raw and r-to-z transformed)
                               "PCOR","ZPCOR","SPCOR","ZSPCOR",                                                  # partial and semi-partial correlations
-                              #"ICC", "ZICC",                                                                    # ICC(1) and r-to-z transformed
+                              #"ICC","ZICC",                                                                    # ICC(1) and r-to-z transformed
                               "R2","ZR2","R2F","ZR2F",                                                          # coefficient of determination / R^2 (raw and r-to-z transformed)
                               "PR","PLN","PLO","PRZ","PAS","PFT",                                               # single proportions (and transformations thereof)
                               "IR","IRLN","IRS","IRFT",                                                         # single-group person-time (incidence) data (and transformations thereof)
                               "MN","POMPMN","SMN","MNLN","SDLN","CVLN",                                         # mean, single-group standardized mean, log(mean), log(SD), log(CV)
-                              "MC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC", # raw/standardized mean change, CLES/AUC, log(ROM), VR, and CVR for dependent samples
+                              "MC","POMPMC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC", # raw/standardized mean change, CLES/AUC, log(ROM), VR, and CVR for dependent samples
                               "ARAW","AHW","ABT",                                                               # alpha (and transformations thereof)
                               "REH","CLES","CLESN","AUC","AUCN",                                                # relative excess heterozygosity, common language effect size / area under the curve
                               "HR","HD",                                                                        # hazard (rate) ratios and differences
@@ -141,6 +141,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
    if (is.element(measure, c("AS","PHI","ZPHI","RTET","ZTET","IRSD","PAS","PFT","IRS","IRFT")) && is.null(addval))
       add <- 0
+
+   if (is.element(measure, c("ROM","VR","CVR","SDLN","CVLN","ROMC","CVRC")) && !is.logical(correct))
+      stop(mstyle$stop("Argument 'correct' must be a logical for this measure."))
 
    #########################################################################
    #########################################################################
@@ -860,9 +863,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          mini <- .getx("mini", mf=mf, data=data, checknumeric=TRUE) # for POMPMD
          maxi <- .getx("maxi", mf=mf, data=data, checknumeric=TRUE) # for POMPMD
 
-         ### for these measures, need m1i, m2i, sd1i, sd2i, n1i, and n2i (and can also specify di/ti/pi/ri)
-
          if (is.element(measure, c("SMD","RPB","ZPB","RBIS","ZBIS","D2OR","D2ORN","D2ORL"))) {
+
+            ### for these measures, need m1i, m2i, sd1i, sd2i, n1i, and n2i (and can also specify di/ti/pi/ri)
 
             if (!.equal.length(m1i, m2i, sd1i, sd2i, n1i, n2i, di, ti, pi, ri))
                stop(mstyle$stop("Supplied data vectors are not all of the same length."))
@@ -893,9 +896,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          }
 
-         ### for these measures, need m1i, m2i, sd1i, sd2i, n1i, and n2i
-
          if (is.element(measure, c("MD","SMDH","SMD1H","ROM","CVR"))) {
+
+            ### for these measures, need m1i, m2i, sd1i, sd2i, n1i, and n2i
 
             if (!.all.specified(m1i, m2i, sd1i, sd2i, n1i, n2i))
                stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., m1i, m2i, sd1i, sd2i, n1i, n2i)."))
@@ -905,9 +908,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          }
 
-         ### for this measure, need m1i, m2i, sd1i, sd2i, n1i, n2i, mini, and maxi
-
          if (measure == "POMPMD") {
+
+            ### for this measure, need m1i, m2i, sd1i, sd2i, n1i, n2i, mini, and maxi
 
             if (!.all.specified(m1i, m2i, sd1i, sd2i, n1i, n2i, mini, maxi))
                stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., m1i, m2i, sd1i, sd2i, n1i, n2i, mini, maxi)."))
@@ -922,9 +925,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          }
 
-         ### for this measure, need sd1i, sd2i, n1i, and n2i
-
          if (measure == "VR") {
+
+            ### for this measure, need sd1i, sd2i, n1i, and n2i
 
             if (!.all.specified(sd1i, sd2i, n1i, n2i))
                stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., sd1i, sd2i, n1i, n2i)."))
@@ -934,9 +937,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          }
 
-         ### for this measure, need m1i, m2i, sd2i, n1i, and n2i
-
          if (measure == "SMD1") {
+
+            ### for this measure, need m1i, m2i, sd2i, n1i, and n2i
 
             if (!.all.specified(m1i, m2i, sd2i, n1i, n2i))
                stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., m1i, m2i, sd2i, n1i, n2i)."))
@@ -982,7 +985,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          di <- (m1i - m2i) / sdpi
 
-         ### (raw) mean difference
+         ### (raw) mean difference (raw and POMP version)
 
          if (is.element(measure, c("MD","POMPMD"))) {
 
@@ -1015,7 +1018,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
             ### apply bias-correction to di values
 
-            cmi <- .cmicalc(mi, correct=correct)
+            cmi <- cmicalc(mi, method=correct)
             yi <- cmi * di
 
             vtype <- .expand1(vtype, k)
@@ -1024,7 +1027,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
             mnwyi <- .wmean(yi, ni, na.rm=TRUE) # sample size weighted average of yi's
 
-            if (!all(is.element(vtype, c("LS","LS2","UB","AV","H0"))))
+            if (!all(is.element(vtype, c("LS","LS2","LS3","UB","AV","H0"))))
                stop(mstyle$stop("For this outcome measure, 'vtype' must be either 'LS', 'LS2', 'UB', or 'H0'."))
 
             for (i in seq_len(k)) {
@@ -1036,6 +1039,10 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
                ### alternative large sample approximation to the sampling variance
                if (vtype[i] == "LS2")
                   vi[i] <- cmi[i]^2 * (1/n1i[i] + 1/n2i[i] + di[i]^2/(2*npi[i])) # Borenstein, 2009, equation 12.17; analogous to LS2 for SMCC and SMCR; see [b]
+
+               ### large sample approximation to the sampling variance (used by Revman; and correct="approx")
+               if (vtype[i] == "LS3")
+                  vi[i] <- 1/n1i[i] + 1/n2i[i] + yi[i]^2/(2*(npi[i]-3.94)) # Hedges & Olkin, 1985, equation 8 / Lin & Aloe, 2020, equation 14
 
                ### unbiased estimate of the sampling variance
                if (vtype[i] == "UB")
@@ -1057,7 +1064,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          if (measure == "SMDH") {
 
-            cmi  <- .cmicalc(mi, correct=correct)
+            cmi  <- cmicalc(mi, method=correct)
             sdpi <- sqrt((sd1i^2 + sd2i^2)/2)
             di   <- (m1i - m2i) / sdpi
             yi   <- cmi * di
@@ -1097,7 +1104,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          ### standardized mean difference standardized by SD of group 2 (with heteroscedastic SDs)
 
          if (measure == "SMD1H") {
-            cmi <- .cmicalc(mi, correct=correct)
+            cmi <- cmicalc(mi, method=correct)
             yi <- cmi * di
             vi <- (sd1i^2/sd2i^2)/(n1i-1) + 1/(n2i-1) + yi^2/(2*(n2i-1)) # Bonett, 2008a, equation 12
             #vi <- cmi^2 * vi
@@ -1812,19 +1819,22 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          if (measure == "ICC") {
             yi <- ri
-            vi <- 2 * (1-ri)^2 * (1 + (mi-1) * ri)^2 / (mi * (mi-1) * ni)
+            vi <- 2 * (1-ri)^2 * (1 + (mi-1) * ri)^2 / (mi * (mi-1) * ni) # Fisher, 1925
          }
+
+         ### distinguish between the 'proper' ZICC transformation and using a value of mi that does not match up with the actual mi?
 
          ### r-to-z transformed ICC values
 
          if (measure == "ZICC") {
             yi <- 1/2 * log((1 + (mi-1) * ri) / (1 - ri))
-            #vi <- mi / (2 * (mi-1) * ni)
+            vi <- mi / (2 * (mi-1) * ni)
             # this is consistent with escalc(measure="ICC") -> conv.delta(transf=transf.icctoz)
             #tmp <- escalc(measure="ICC", ri=ri, mi=mi, ni=ni)
-            #vi <- conv.delta(yi, vi, data=tmp, transf=transf.icctoz, targs=list(mi=mi), replace=TRUE)$vi
-            # but Fisher (1921) gives the following equation
-            vi <- mi / (2 * (mi-1) * (ni-2))
+            #vi <- conv.delta(yi, vi, data=tmp, transf=transf.icctoz, mi=mi, replace=TRUE)$vi
+            # but Fisher (1925) gives the following equations
+            #vi <- mi / (2 * (mi-1) * (ni-2)) # in general
+            #vi <- 1 / (ni - 3/2) # for mi=2 (which is not consistent with the general equation either)
          }
 
       }
@@ -2387,12 +2397,12 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          mi   <- .getx("mi",   mf=mf, data=data, checknumeric=TRUE) # for SDLN, do not need to supply this
          sdi  <- .getx("sdi",  mf=mf, data=data, checknumeric=TRUE)
          ni   <- .getx("ni",   mf=mf, data=data, checknumeric=TRUE)
-         mini <- .getx("mini", mf=mf, data=data, checknumeric=TRUE)
-         maxi <- .getx("maxi", mf=mf, data=data, checknumeric=TRUE)
-
-         ### for these measures, need mi, sdi, and ni
+         mini <- .getx("mini", mf=mf, data=data, checknumeric=TRUE) # only need this for POMPMN
+         maxi <- .getx("maxi", mf=mf, data=data, checknumeric=TRUE) # only need this for POMPMN
 
          if (is.element(measure, c("MN","SMN","MNLN","CVLN"))) {
+
+            ### for these measures, need mi, sdi, and ni
 
             if (!.all.specified(mi, sdi, ni))
                stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., mi, sdi, ni)."))
@@ -2402,9 +2412,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          }
 
-         ### for this measure, need mi, sdi, ni, mini, and maxi
-
          if (measure == "POMPMN") {
+
+            ### for this measure, need mi, sdi, ni, mini, and maxi
 
             if (!.all.specified(mi, sdi, ni, mini, maxi))
                stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., mi, sdi, ni, mini, maxi)."))
@@ -2417,9 +2427,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          }
 
-         ### for this measure, need sdi and ni
-
          if (measure == "SDLN") {
+
+            ### for this measure, need sdi and ni
 
             if (!.all.specified(sdi, ni))
                stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., sdi, ni)."))
@@ -2451,7 +2461,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          k <- length(ni)
 
-         ### (raw) mean
+         ### (raw) mean (raw and POMP version)
 
          if (is.element(measure, c("MN","POMPMN"))) {
 
@@ -2482,7 +2492,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          ### single-group standardized mean
 
          if (measure == "SMN") {
-            cmi <- .cmicalc(ni-1, correct=correct)
+            cmi <- cmicalc(ni-1, method=correct)
             yi <- cmi * mi / sdi
             vi <- 1 / ni + yi^2 / (2*ni)
          }
@@ -2522,7 +2532,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
       ######################################################################
 
-      if (is.element(measure, c("MC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC"))) {
+      if (is.element(measure, c("MC","POMPMC","SMCC","SMCR","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC"))) {
 
          m1i  <- .getx("m1i",  mf=mf, data=data, checknumeric=TRUE) # for VRC, do not need to supply this
          m2i  <- .getx("m2i",  mf=mf, data=data, checknumeric=TRUE) # for VRC, do not need to supply this
@@ -2533,6 +2543,8 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          di   <- .getx("di",   mf=mf, data=data, checknumeric=TRUE)
          ti   <- .getx("ti",   mf=mf, data=data, checknumeric=TRUE)
          pi   <- .getx("pi",   mf=mf, data=data, checknumeric=TRUE)
+         mini <- .getx("mini", mf=mf, data=data, checknumeric=TRUE) # only need this for POMPMC
+         maxi <- .getx("maxi", mf=mf, data=data, checknumeric=TRUE) # only need this for POMPMC
 
          ri <- .expand1(ri, list(m1i, m2i, sd1i, sd2i, ni, di, ti, pi))
 
@@ -2548,9 +2560,26 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          }
 
+         if (measure == "POMPMC") {
+
+            ### for this measure, need m1i, m2i, sd1i, sd2i, ni, ri, mini, and maxi
+
+            if (!.all.specified(m1i, m2i, sd1i, sd2i, ni, ri, mini, maxi))
+               stop(mstyle$stop("Cannot compute outcomes. Check that all of the required information is specified\n  via the appropriate arguments (i.e., m1i, m2i, sd1i, sd2i, ni, mini, maxi)."))
+
+            if (!.equal.length(m1i, m2i, sd1i, sd2i, ni, ri, mini, maxi))
+               stop(mstyle$stop("Supplied data vectors are not all of the same length."))
+
+            m1i <- 100 * (m1i - mini) / (maxi - mini)
+            m2i <- 100 * (m2i - mini) / (maxi - mini)
+            sd1i <- 100 * sd1i / (maxi - mini)
+            sd2i <- 100 * sd2i / (maxi - mini)
+
+         }
+
          if (measure == "SMCC") {
 
-            ### for this measures, need m1i, m2i, sd1i, sd2i, ni, and ri (and can also specify di/ti/pi)
+            ### for this measure, need m1i, m2i, sd1i, sd2i, ni, and ri (and can also specify di/ti/pi)
 
             if (!.equal.length(m1i, m2i, sd1i, sd2i, ri, ni, di, ti, pi))
                stop(mstyle$stop("Supplied data vectors are not all of the same length."))
@@ -2612,7 +2641,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
             ri   <- .getsubset(ri,   subset)
          }
 
-         if (is.element(measure, c("MC","SMCC","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC"))) {
+         if (is.element(measure, c("MC","POMPMC","SMCC","SMCRH","SMCRP","SMCRPH","CLESCN","AUCCN","ROMC","VRC","CVRC"))) {
             if (any(c(sd1i, sd2i) < 0, na.rm=TRUE))
                stop(mstyle$stop("One or more standard deviations are negative."))
          }
@@ -2638,9 +2667,9 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          sddiffi <- sqrt(sd1i^2 + sd2i^2 - 2*ri*sd1i*sd2i) # SD of the change scores
          sdpi <- sqrt((sd1i^2+sd2i^2)/2) # pooled SD
 
-         ### (raw) mean change
+         ### (raw) mean change (raw and POMP version)
 
-         if (measure == "MC") {
+         if (is.element(measure, c("MC","POMPMC"))) {
             yi <- m1i - m2i
             vi <- sddiffi^2 / ni
          }
@@ -2650,7 +2679,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          if (measure == "SMCC") {
 
-            cmi <- .cmicalc(mi, correct=correct)
+            cmi <- cmicalc(mi, method=correct)
             di <- (m1i - m2i) / sddiffi
             yi <- cmi * di
 
@@ -2687,7 +2716,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          if (measure == "SMCR") {
 
-            cmi <- .cmicalc(mi, correct=correct)
+            cmi <- cmicalc(mi, method=correct)
             di <- (m1i - m2i) / sd1i
             yi <- cmi * di
 
@@ -2729,7 +2758,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
          if (measure == "SMCRH") {
 
-            cmi <- .cmicalc(mi, correct=correct)
+            cmi <- cmicalc(mi, method=correct)
             di <- (m1i - m2i) / sd1i
             yi <- cmi * di
 
@@ -2762,7 +2791,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          if (measure == "SMCRP") {
 
             mi <- 2*(ni-1) / (1 + ri^2)
-            cmi <- .cmicalc(mi, correct=correct)
+            cmi <- cmicalc(mi, method=correct)
             di <- (m1i - m2i) / sdpi
             yi <- cmi * di
 
@@ -2788,7 +2817,7 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
          if (measure == "SMCRPH") {
 
             mi <- 2*(ni-1) / (1 + ri^2)
-            cmi <- .cmicalc(mi, correct=correct)
+            cmi <- cmicalc(mi, method=correct)
             di <- (m1i - m2i) / sdpi
             yi <- cmi * di
 

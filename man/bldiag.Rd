@@ -11,6 +11,9 @@ bldiag(\dots, order)
    \item{\dots}{individual matrices or a list of matrices.}
    \item{order}{optional argument to specify a variable based on which a square block diagonal matrix should be ordered.}
 }
+\value{
+   A (block diagonal) matrix.
+}
 \author{
    Posted to R-help by Berton Gunter (2 Sep 2005) with some further adjustments by Wolfgang Viechtbauer (\email{wvb@metafor-project.org}, \url{https://www.metafor-project.org}).
 }

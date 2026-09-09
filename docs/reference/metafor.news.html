@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metafor</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-18</span>
       </span>
     </div>
 
@@ -115,13 +115,13 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">metafor.news</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  Changes in version 5.1-16 (2026-07-28)                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Changes in version 5.1-18 (2026-09-09)                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - escalc() and rma() now warn about unusually large standardized mean</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     differences (possibly a result of using SEs instead of SDs in their</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     calculation)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - added measures "POMPMD" and "POMPMN" to escalc()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - added measures "POMPMD", "POMPMN", and "POMPMC" to escalc()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - corrected the equations for vtype="LS2" for measures "ROMC", "VRC",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     and "CVRC"</span>
@@ -135,7 +135,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     forest.cumul.rma()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - corrected a bug in conv.2x2() where some values for the ci and di</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     cells could be incorrectly replaced when replace=="all"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     cells could be incorrectly replaced when replace="all"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - can now also use replace="complete" in conv.2x2(), conv.delta(),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     conv.fivenum(), and conv.wald() to also replace non-missing values</span>
@@ -147,7 +147,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - fixed a bug in deltamethod() when order=2 and added order=3 as an</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     option</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   - added yaxis="tau" as an option in plot.cumul.rma()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - added yaxis="tau" as an option to plot.cumul.rma()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - corrected a bug in transf.iahw.int(), transf.iahw.mode(),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     transf.iabt.int(), and transf.iabt.mode() not returning the correct</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     value when tau2 == 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - added cmicalc() as an exported function</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - improved the documentation a bit</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

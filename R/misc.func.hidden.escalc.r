@@ -1,28 +1,5 @@
 ############################################################################
 
-### c(m) calculation function for bias correction of SMDs or SMCC/SMCRs
-
-.cmicalc <- function(mi, correct=TRUE) {
-
-   ### this can overflow if mi is 'large' (if mi >= 344)
-   #cmi <- gamma(mi/2)/(sqrt(mi/2)*gamma((mi-1)/2))
-   ### catch those cases and apply the approximate formula (which is accurate then)
-   #is.na <- is.na(cmi)
-   #cmi[is.na] <- 1 - 3/(4*mi[is.na] - 1)
-
-   if (correct) {
-      # this avoids the problem with overflow altogether
-      cmi <- ifelse(mi <= 1, NA_real_, exp(lgamma(mi/2) - log(sqrt(mi/2)) - lgamma((mi-1)/2)))
-   } else {
-      cmi <- rep(1, length(mi))
-   }
-
-   return(cmi)
-
-}
-
-############################################################################
-
 ### function to compute the tetrachoric correlation coefficient and its sampling variance
 
 .rtet <- function(ai, bi, ci, di, maxcor=.9999) {
@@ -212,13 +189,10 @@
    nt <- n1 * n2 / (n1 + n2)
    m  <- n1 + n2 - 2
 
-   cm <- .cmicalc(m)
+   cm <- cmicalc(m, method=correct)
 
    if (xisg)
       x <- x / cm
-
-   if (!correct)
-      cm <- 1
 
    if (warn) {
       res <- dt(x * sqrt(nt) / cm, df = m, ncp = sqrt(nt) * theta) * sqrt(nt) / cm

@@ -133,10 +133,12 @@ transf.ztor2 <- function(xi)
 #   1/2 * log((1 + (mi-1)*xi) / (1 - xi))
 #}
 #
-#transf.zztoicc <- function(xi, mi) {
+#transf.ztoicc <- function(xi, mi) {
 #   a <- exp(2 * xi)
 #   (a - 1) / (a + mi - 1)
 #}
+
+# need a version with targs?
 
 ############################################################################
 

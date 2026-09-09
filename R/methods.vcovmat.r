@@ -30,12 +30,18 @@ print.vcovmat <- function(x, digits=4, tol, zero=".", na="NA", ...) {
 
    #print(xx, quote=FALSE, right=TRUE, ...)
 
+   .rmspace <- isTRUE(attr(xx, ".rmspace"))
+
+   if (.rmspace)
+      attr(xx, ".rmspace") <- NULL
+
    .space()
 
    tmp <- capture.output(print(xx, quote=FALSE, right=TRUE, ...))
    .print.vcovmat(tmp, mstyle)
 
-   .space()
+   if (!.rmspace)
+      .space()
 
    invisible()
 
