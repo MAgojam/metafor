@@ -1,7 +1,5 @@
 ### library(metafor); library(testthat); Sys.setenv(NOT_CRAN="true"); Sys.setenv(RUN_VIS_TESTS="true")
 
-source("~/work/meta_analysis/metafor/metafor.r")
-
 source("settings.r")
 
 context("Checking misc: deltamethod() function")

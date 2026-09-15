@@ -2735,8 +2735,8 @@ var.names=c("yi","vi"), add.measure=FALSE, append=TRUE, replace=TRUE, digits, ..
 
                ### alternative large sample approximation to the sampling variance
                if (vtype[i] == "LS2")
-                  vi[i] <- cmi[i]^2 * (2*(1-ri[i])/ni[i] + di[i]^2 / (2*ni[i])) # corrected (!) equation from Borenstein et al., 2009; analogous to LS2 for SMD and SMCC; see [b]
-                  #vi[i] <- cmi[i]^2 * 2 * (1-ri[i]) * (1/ni[i] + di[i]^2 / (2*ni[i])) # Borenstein, 2009, equation 4.28 (with J^2 multiplier) but this is incorrect
+                  vi[i] <- cmi[i]^2 * (2*(1-ri[i])/ni[i] + di[i]^2 / (2*ni[i])) # corrected (!) equation from Borenstein et al., 2009/2021; analogous to LS2 for SMD and SMCC; see [b]
+                  #vi[i] <- cmi[i]^2 * 2 * (1-ri[i]) * (1/ni[i] + di[i]^2 / (2*ni[i])) # Borenstein, 2009/2021, equation 4.28 (with J^2 multiplier) but this is incorrect
 
                ### unbiased estimate of the sampling variance
                if (vtype[i] == "UB") {

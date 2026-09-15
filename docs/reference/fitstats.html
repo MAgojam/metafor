@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metafor</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.1-18</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.2-1</span>
       </span>
     </div>
 
@@ -108,7 +108,12 @@
 <span><span class="co"># S3 method for class 'rma'</span></span>
 <span><span class="fu">AIC</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, k<span class="op">=</span><span class="fl">2</span>, correct<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co"># S3 method for class 'rma'</span></span>
-<span><span class="fu">BIC</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">BIC</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'rma'</span></span>
+<span><span class="fu">df.residual</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="co"># S3 method for class 'rma'</span></span>
+<span><span class="fu">nobs</span><span class="op">(</span><span class="va">object</span>, all<span class="op">=</span><span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -129,6 +134,9 @@
    <dt id="arg-correct">correct<a class="anchor" aria-label="anchor" href="#arg-correct"></a></dt>
 <dd><p>logical to specify whether the regular (default) or corrected (i.e., AICc) should be extracted.</p></dd>
 
+   <dt id="arg-all">all<a class="anchor" aria-label="anchor" href="#arg-all"></a></dt>
+<dd><p>logical to indicate whether various ways to count the number of observations should be returned (only for <code>nobs()</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -136,6 +144,8 @@
 <p>For <code>logLik</code>, an object of class <code>"logLik"</code>, providing the (restricted) log-likelihood of the model evaluated at the estimated coefficient(s).</p>
 <p>For <code>deviance</code>, a numeric value with the corresponding deviance.</p>
 <p>For <code>AIC</code> and <code>BIC</code>, either a numeric value with the corresponding AIC, AICc, or BIC or a data frame with rows corresponding to the models and columns representing the number of parameters in the model (<code>df</code>) and the AIC, AICc, or BIC.</p>
+<p>For <code>df.residual</code>, the residual degrees-of-freedom.</p>
+<p>For <code>nobs</code>, the number of observations (effect size estimates) or a vector based on various ways to count the number of observations (when <code>all=TRUE</code>).</p>
     </div>
     <div id="note">
     <h2>Note</h2>

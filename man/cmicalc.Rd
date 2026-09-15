@@ -2,7 +2,7 @@
 \alias{cmicalc}
 \title{Calculate the Bias Correction Factor for SMDs and Related Measures}
 \description{
-   Function to calculate the bias correction factor the standardized mean differences and related measures. \loadmathjax
+   Function to calculate the bias correction factor for standardized mean differences and related measures. \loadmathjax
 }
 \usage{
 cmicalc(mi, method="exact")
