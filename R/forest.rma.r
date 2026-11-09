@@ -125,10 +125,27 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
    if (missing(preddist)) {
       preddist <- NULL
    } else {
-      if (!is.list(preddist) || length(preddist) < 2L)
-         stop(mstyle$stop("Argument 'preddist' must be a list (of length >= 2)."))
-      if (length(preddist[[1]]) != length(preddist[[2]]))
-         stop(mstyle$stop("Length of 'preddist[[1]]' does not match the length of 'preddist[[2]]'."))
+      if (is.list(preddist)) {
+         if (length(preddist) < 2L)
+            stop(mstyle$stop("Argument 'preddist' must be a list of length >= 2."))
+         if (length(preddist[[1]]) != length(preddist[[2]]))
+            stop(mstyle$stop("Length of 'preddist[[1]]' does not match the length of 'preddist[[2]]'."))
+         if (!is.null(preddist$level))
+            predlevel <- .level(preddist$level)
+      } else {
+         if (!.is.vector(preddist) || !is.numeric(preddist))
+            stop(mstyle$stop("Argument 'preddist' must be a numeric vector."))
+         tmp <- try(density(preddist), silent=TRUE)
+         if (inherits(tmp, "try-error"))
+            stop(mstyle$stop("Could not construct the density from the 'preddist' values."))
+         if (!is.null(attr(preddist, "level")))
+            predlevel <- .level(attr(preddist, "level"))
+         if (is.null(attr(preddist, "pi.lb")) || is.null(attr(preddist, "pi.ub"))) {
+            tmp$pi.lb <- quantile(preddist, predlevel/2)
+            tmp$pi.ub <- quantile(preddist, 1-predlevel/2)
+         }
+         preddist <- tmp
+      }
    }
 
    ### digits[1] for annotations, digits[2] for x-axis labels, digits[3] (if specified) for weights
@@ -1045,24 +1062,19 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
          beta.pi.lb <- predres$pi.lb
          beta.pi.ub <- predres$pi.ub
       } else {
-         pdxs <- preddist[[1]]
-         pdys <- preddist[[2]]
-         #dx  <- diff(pdxs)[1]
-         #cdf <- cumsum(pdys) * dx
-         cdf <- cumsum(diff(pdxs) * (pdys[-1]+pdys[-length(pdys)])/2)
-         cdf <- cdf / max(cdf)
-         if (is.null(preddist$pi.lb)) {
-            beta.pi.lb <- pdxs[which.min(abs(cdf - level/2))]
+         if (is.null(preddist$pi.lb) || is.null(preddist$pi.ub)) {
+            pdxs <- preddist[[1]]
+            pdys <- preddist[[2]]
+            #dx  <- diff(pdxs)[1]
+            #cdf <- cumsum(pdys) * dx
+            cdf <- cumsum(diff(pdxs) * (pdys[-1]+pdys[-length(pdys)])/2)
+            cdf <- cdf / max(cdf)
+            beta.pi.lb <- pdxs[which.min(abs(cdf - predlevel/2))]
+            beta.pi.ub <- pdxs[which.min(abs(cdf - (1-predlevel/2)))]
          } else {
             beta.pi.lb <- preddist$pi.lb
-         }
-         if (is.null(preddist$pi.ub)) {
-            beta.pi.ub <- pdxs[which.min(abs(cdf - (1-level/2)))]
-         } else {
             beta.pi.ub <- preddist$pi.ub
          }
-         if (!is.null(preddist$level))
-            predlevel <- .level(preddist$level)
       }
 
       if (is.function(transf)) {
@@ -1176,8 +1188,8 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
             x.len <- 10000
 
             if (predstyle == "shade") {
-               q.lo <- level/2
-               q.hi <- 1-level/2
+               q.lo <- predlevel/2
+               q.hi <- 1-predlevel/2
             } else {
                q.lo <- 0.0001
                q.hi <- 0.9999
@@ -1225,7 +1237,12 @@ lty, fonts, cex, cex.lab, cex.axis, ...) {
             } else {
                xs <- preddist[[1]]
                ys <- preddist[[2]]
-               if (!is.null(predlim)) {
+               if (is.null(predlim)) {
+                  if (predstyle == "shade") {
+                     ys <- ys[xs >= beta.pi.lb & xs <= beta.pi.ub]
+                     xs <- xs[xs >= beta.pi.lb & xs <= beta.pi.ub]
+                  }
+               } else {
                   if (length(predlim) != 2L)
                      stop(mstyle$stop("Argument 'predlim' must be of length 2."))
                   if (is.function(transf)) {

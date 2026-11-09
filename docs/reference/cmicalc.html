@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metafor</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.3-3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">5.3-4</span>
       </span>
     </div>
 
@@ -110,7 +110,7 @@
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>Standardized mean differences (Cohen's d values) have a slight positive bias (i.e., they tend to be too large on average). Hedges (1981) derived the bias correction factor to make make standardized mean differences unbiased (yielding what is commonly referred to as Hedges' g values).</p>
+    <p>Standardized mean differences (Cohen's d values) have a slight positive bias (i.e., they tend to be too large on average). Hedges (1981) derived the bias correction factor to make standardized mean differences unbiased (yielding what is commonly referred to as Hedges' g values).</p>
 <p>The function computes the bias correction factor, using <em></em>\(m_i\) as input. For standardized mean differences, this is equal to <em></em>\(m_i = n_{1i} + n_{2i} - 2\), where <em></em>\(n_{1i}\) and <em></em>\(n_{2i}\) are the number of subjects in the two groups. The same bias correction factor can be used for various other related measures, such as standardized mean changes, except that <em></em>\(m_i\) may need to be calculated differently.</p>
 <p>By default (i.e., when <code>method="exact"</code>), the method uses the exact formula to calculate the bias correction factor (equation 6e in Hedges, 1981), that is, \[c(m_i) = \frac{\Gamma(\frac{m_i}{2})}{\sqrt{\frac{m_i}{2}}\Gamma(\frac{m_i-1}{2})}.\] When <code>method="approx"</code>, the (very accurate) approximation \[c(m_i) = 1 - \frac{3}{4m_i -1}\] is used instead (first equation on page 114 in Hedges, 1981).</p>
     </div>

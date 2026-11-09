@@ -110,12 +110,27 @@ transf, atransf, targs, efac, col, border, lty, fonts, cex, constarea=FALSE, ...
       if (k != 1)
          stop(mstyle$stop("Can only use 'preddist' when plotting a single estimate."))
       preddist <- ddd$preddist
-      if (!is.list(preddist) || length(preddist) < 2L)
-         stop(mstyle$stop("Argument 'preddist' must be a list (of length >= 2)."))
-      if (length(preddist[[1]]) != length(preddist[[2]]))
-         stop(mstyle$stop("Length of 'preddist[[1]]' does not match the length of 'preddist[[2]]'."))
-      if (!is.null(preddist$level))
-         pi.level <- .level(preddist$level)
+      if (is.list(preddist)) {
+         if (length(preddist) < 2L)
+            stop(mstyle$stop("Argument 'preddist' must be a list of length >= 2."))
+         if (length(preddist[[1]]) != length(preddist[[2]]))
+            stop(mstyle$stop("Length of 'preddist[[1]]' does not match the length of 'preddist[[2]]'."))
+         if (!is.null(preddist$level))
+            pi.level <- .level(preddist$level)
+      } else {
+         if (!.is.vector(preddist) || !is.numeric(preddist))
+            stop(mstyle$stop("Argument 'preddist' must be a numeric vector."))
+         tmp <- try(density(preddist), silent=TRUE)
+         if (inherits(tmp, "try-error"))
+            stop(mstyle$stop("Could not construct the density from the 'preddist' values."))
+         if (!is.null(attr(preddist, "level")))
+            pi.level <- .level(attr(preddist, "level"))
+         if (is.null(attr(preddist, "pi.lb")) || is.null(attr(preddist, "pi.ub"))) {
+            tmp$pi.lb <- quantile(preddist, pi.level/2)
+            tmp$pi.ub <- quantile(preddist, 1-pi.level/2)
+         }
+         preddist <- tmp
+      }
    }
 
    ### vertical expansion factors
@@ -346,7 +361,7 @@ transf, atransf, targs, efac, col, border, lty, fonts, cex, constarea=FALSE, ...
       } else {
 
          if (predstyle != "line")
-            stop(mstyle$stop("Cannot draw prediction interval if 'pi.lb' and 'pi.ub' are unspecified."))
+            stop(mstyle$stop("Cannot add prediction interval if 'pi.lb' and 'pi.ub' are unspecified."))
 
          pi.lb <- rep(NA_real_, k)
          pi.ub <- rep(NA_real_, k)
@@ -355,12 +370,14 @@ transf, atransf, targs, efac, col, border, lty, fonts, cex, constarea=FALSE, ...
 
    } else {
 
-      pdxs <- preddist[[1]]
-      pdys <- preddist[[2]]
-      #dx  <- diff(pdxs)[1]
-      #cdf <- cumsum(pdys) * dx
-      cdf <- cumsum(diff(pdxs) * (pdys[-1]+pdys[-length(pdys)])/2)
-      cdf <- cdf / max(cdf)
+      if (is.null(preddist$pi.lb) || is.null(preddist$pi.ub)) {
+         pdxs <- preddist[[1]]
+         pdys <- preddist[[2]]
+         #dx  <- diff(pdxs)[1]
+         #cdf <- cumsum(pdys) * dx
+         cdf <- cumsum(diff(pdxs) * (pdys[-1]+pdys[-length(pdys)])/2)
+         cdf <- cdf / max(cdf)
+      }
       if (is.null(preddist$pi.lb)) {
          if (!hasArg(pi.lb) || is.null(pi.lb))
             pi.lb <- pdxs[which.min(abs(cdf - pi.level/2))]
@@ -373,6 +390,7 @@ transf, atransf, targs, efac, col, border, lty, fonts, cex, constarea=FALSE, ...
       } else {
          pi.ub <- preddist$pi.ub
       }
+
    }
 
    ### set rows value
@@ -722,7 +740,12 @@ transf, atransf, targs, efac, col, border, lty, fonts, cex, constarea=FALSE, ...
          } else {
             xs <- preddist[[1]]
             ys <- preddist[[2]]
-            if (!is.null(predlim)) {
+            if (is.null(predlim)) {
+               if (predstyle == "shade") {
+                  ys <- ys[xs >= pi.lb & xs <= pi.ub]
+                  xs <- xs[xs >= pi.lb & xs <= pi.ub]
+               }
+            } else {
                if (length(predlim) != 2L)
                   stop(mstyle$stop("Argument 'predlim' must be of length 2."))
                if (is.function(transf)) {

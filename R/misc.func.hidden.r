@@ -225,7 +225,7 @@
    return(all(abs(x) < eps | abs(x - 1) < eps))
    #return(all(sapply(x, identical, 0) | sapply(x, identical, 1)))
 
-### function to test whether something is a vector (in the sense of being atomic, not a matrix, and not NULL)
+### function to test whether something is a vector (in the sense of being atomic, not a list/matrix, and not NULL)
 
 .is.vector <- function(x)
    is.atomic(x) && !is.matrix(x) && !is.null(x)

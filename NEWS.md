@@ -1,8 +1,10 @@
-# metafor 5.3-3 (2026-11-05)
+# metafor 5.3-4 (2026-11-09)
 
 - added `order="rev"` to `forest.rma()` and `forest.default()`
 
 - added `predstyle="line2"` which is like `predstyle="line"` but the prediction interval bounds are also provided as part of the annotations
+
+- can now also pass just a vector of sampled values to `preddist`
 
 - added `predtype="t<df>"` to manually specify the degrees of freedom for the prediction interval
 
